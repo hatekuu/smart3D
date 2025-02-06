@@ -1,0 +1,61 @@
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #007bff;
+  padding: 10px 20px;
+  color: white;
+  border: 2px solid #ced4da; /* Thêm viền vuông */
+  border-radius: 8px; /* Tùy chọn: Thêm bo tròn góc */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Tùy chọn: Thêm bóng đổ */
+  position: fixed;
+  width: calc(100% - 40px); /* Chiều ngang bằng với màn hình trừ đi padding */
+  top: -2px;
+  left: -2px; /* Đảm bảo header bắt đầu từ cạnh trái màn hình với khoảng cách */
+  z-index: 1000; /* Đảm bảo header luôn nằm trên cùng */
+}
+
+.header-container .left {
+  display: flex;
+  align-items: center;
+}
+
+.header-container .right {
+  display: flex;
+  align-items: center;
+}
+
+.header-container ul {
+  list-style: none;
+  display: flex;
+  margin: 0;
+  padding: 0;
+}
+
+.header-container li {
+  margin: 0 10px;
+}
+
+.header-container a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+.header-container a:hover {
+  color: #ffdd57; /* Thay đổi màu khi hover */
+  text-decoration: underline;
+}
+
+.header-container .logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+/* Đảm bảo nội dung không bị che khuất bởi header */
+body {
+  padding-top: 60px; /* Khoảng cách bằng chiều cao của header */
+  padding-left: 20px; /* Khoảng cách từ cạnh trái */
+  padding-right: 20px; /* Khoảng cách từ cạnh phải */
+}
