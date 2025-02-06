@@ -12,7 +12,7 @@ const LogoutButton = () => {
       alert('Đăng xuất thành công!');
 
       // Điều hướng về trang đăng nhập
-      window.location.href = '/3dprintClient/login';
+      window.location.href = '/smart3D/login';
     } catch (error) {
       console.error('Lỗi khi logout:', error);
       alert('Đăng xuất thất bại! Vui lòng thử lại.');

@@ -12,7 +12,7 @@ const Register = () => {
   const handleRegister = async () => {
     try {
       await register(username, password, confirmPassword, secretKey);
-      window.location.href = '/3dprintClient/login';  // Redirect to login page after successful registration
+      window.location.href = '/smart3D/login';  // Redirect to login page after successful registration
     } catch (err) {
       setError(err.message);
     }

@@ -14,9 +14,9 @@ const Login = () => {
       const role = userData.role;
 
       if (role === 'manager') {
-        window.location.href = '/3dprintClient/manager';  // Điều hướng đến trang quản lý
+        window.location.href = '/smart3D/manager';  // Điều hướng đến trang quản lý
       } else {
-        window.location.href = '/3dprintClient/products';  // Điều hướng đến trang danh sách sản phẩm
+        window.location.href = '/smart3D/products';  // Điều hướng đến trang danh sách sản phẩm
       }
     } catch (err) {
       setError(err.message);
