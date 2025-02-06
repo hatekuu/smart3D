@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/3dprintClient/static/css/main.01085eee.css",
+    "main.js": "/3dprintClient/static/js/main.c03a0f1f.js",
+    "index.html": "/3dprintClient/index.html",
+    "main.01085eee.css.map": "/3dprintClient/static/css/main.01085eee.css.map",
+    "main.c03a0f1f.js.map": "/3dprintClient/static/js/main.c03a0f1f.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.01085eee.css",
+    "static/js/main.c03a0f1f.js"
+  ]
+}
