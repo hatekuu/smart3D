@@ -10,7 +10,7 @@ import UploadGcode from './pages/Test';
 
 const App = () => {
   return (
-    <Router basename="/3dprintClient">
+    <Router basename="/smart3D">
       <Routes>
         <Route path="/test" element={<UploadGcode />} />
         <Route path="/" element={<Home />} />
