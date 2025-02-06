@@ -1,6 +1,6 @@
 import React from 'react';
 import axiosInstance from '../../api/axios'; // Import axios instance
-import '../css/Logout.css'
+import { Link } from 'react-router-dom';
 const LogoutButton = () => {
   const handleLogout = async () => {
     try {
@@ -20,9 +20,9 @@ const LogoutButton = () => {
   };
 
   return (
-    <button onClick={handleLogout} className="logout-button">
+    <Link onClick={handleLogout} className="logout-button">
       Logout
-    </button>
+    </Link>
   );
 };
 

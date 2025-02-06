@@ -1,0 +1,11 @@
+/* UserLayout.css (hoặc file CSS tương ứng) */
+.layout-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Đảm bảo chiều cao của trang đủ lớn */
+  }
+  
+  .contentUser {
+    flex-grow: 1; /* Nội dung chiếm phần còn lại của trang */
+  }
+  

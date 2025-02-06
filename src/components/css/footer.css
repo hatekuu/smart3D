@@ -4,12 +4,12 @@ footer {
     color: white;
     text-align: center;
     padding: 20px 0;
-    position: fixed;
-    width: 100% ; /* Chiều ngang bằng với màn hình trừ đi padding */
+    position: relative;
+    width: 101.6% ; /* Chiều ngang bằng với màn hình trừ đi padding */
     bottom: 0;
-    left: -2px; /* Đảm bảo footer bắt đầu từ cạnh trái màn hình với khoảng cách */
+    left: -25px; /* Đảm bảo footer bắt đầu từ cạnh trái màn hình với khoảng cách */
     border-top: 2px solid #ced4da; /* Thêm viền trên */
-    z-index: 1000; /* Đảm bảo footer luôn nằm trên cùng */
+   
   }
   
   footer p {
@@ -17,10 +17,9 @@ footer {
     font-size: 1rem;
   }
   
-  /* Đảm bảo nội dung không bị che khuất bởi footer */
-  body {
-    padding-top: 30px;
-    padding-bottom: 60px; /* Khoảng cách bằng chiều cao của footer */
-    padding-left: 20px; /* Khoảng cách từ cạnh trái */
-    padding-right: 20px; /* Khoảng cách từ cạnh phải */
+  footer a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
   }

@@ -2,60 +2,142 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #007bff;
-  padding: 10px 20px;
+  background: #007bff;
+  padding: 15px 20px;
   color: white;
-  border: 2px solid #ced4da; /* Thêm viền vuông */
-  border-radius: 8px; /* Tùy chọn: Thêm bo tròn góc */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Tùy chọn: Thêm bóng đổ */
   position: fixed;
-  width: calc(100% - 40px); /* Chiều ngang bằng với màn hình trừ đi padding */
-  top: -2px;
-  left: -2px; /* Đảm bảo header bắt đầu từ cạnh trái màn hình với khoảng cách */
-  z-index: 1000; /* Đảm bảo header luôn nằm trên cùng */
+  top: 0;
+  left: 0; /* Sửa lại từ -10px thành 0 */
+  width: 98%;
+  height: 60px; /* Tăng chiều cao nếu cần */
+  z-index: 1000;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.header-container .left {
+/* Đẩy nội dung trang xuống để không bị che */
+body {
+  padding-top: 80px; /* Giữ khoảng trống bằng hoặc lớn hơn chiều cao của header */
+}
+
+.left {
   display: flex;
   align-items: center;
+  gap: 15px;
 }
 
-.header-container .right {
-  display: flex;
-  align-items: center;
-}
-
-.header-container ul {
-  list-style: none;
-  display: flex;
-  margin: 0;
-  padding: 0;
-}
-
-.header-container li {
-  margin: 0 10px;
-}
-
-.header-container a {
+.logo {
+  font-size: 20px;
+  font-weight: bold;
   color: white;
   text-decoration: none;
+}
+
+.logo:hover {
+  color: #ffcc00;
+}
+
+.left input {
+  padding: 8px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  width: 400px;
+  outline: none;
+}
+
+.left button {
+  background: #ffcc00;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
   font-weight: bold;
-  transition: color 0.3s ease;
+  color: white;
 }
 
-.header-container a:hover {
-  color: #ffdd57; /* Thay đổi màu khi hover */
-  text-decoration: underline;
+.left button:hover {
+  background: #e6b800;
 }
 
-.header-container .logo {
-  font-size: 1.5rem;
+.right ul {
+  list-style: none;
+  display: flex;
+  gap: 15px;
+}
+
+.right ul li {
+  display: inline;
+}
+
+.right ul li a {
+  color: white;
+  text-decoration: none;
+  font-size: 16px;
   font-weight: bold;
+  transition: color 0.3s;
 }
 
-/* Đảm bảo nội dung không bị che khuất bởi header */
-body {
-  padding-top: 60px; /* Khoảng cách bằng chiều cao của header */
-  padding-left: 20px; /* Khoảng cách từ cạnh trái */
-  padding-right: 20px; /* Khoảng cách từ cạnh phải */
+.right ul li a:hover {
+  color: #ffcc00;
+}
+.search-container {
+  position: relative;
+  display: inline-block;
+}
+
+.suggestion-list {
+  position: absolute;
+  top: 55px;
+  left: 20px;
+  width: 92%;
+  background: white;
+  border: 1px solid #ddd;
+  color: #080808;
+  border-radius: 5px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 999;
+}
+
+.suggestion-list li {
+  padding: 10px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.suggestion-list li:hover {
+  background: #f0f0f0;
+}
+/* CSS cho user menu */
+.user-menu {
+  position: relative;
+  cursor: pointer;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+ 
+  right: 0;
+  background-color: rgb(143, 139, 139);
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  min-width: 160px;
+  z-index: 10;
+}
+
+.dropdown-menu a {
+  display: block;
+  padding: 10px;
+  text-decoration: none;
+  color: #333;
+}
+
+.dropdown-menu a:hover {
+  background-color: #f5f5f5;
 }

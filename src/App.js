@@ -6,13 +6,13 @@ import Home from './pages/Home';
 import Login from './components/Auth/Login';
 import Register from './components/Auth/Register';
 import ForgotPassword from './components/Auth/ForgotPassword';
-import UploadGcode from './pages/Test';
+import GCodeDiffViewer from './pages/Test';
 
 const App = () => {
   return (
     <Router basename="/smart3D">
       <Routes>
-        <Route path="/test" element={<UploadGcode />} />
+        <Route path="/test" element={<GCodeDiffViewer />} />
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />

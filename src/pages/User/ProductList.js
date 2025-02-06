@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getProducts } from '../../api/product';
+import { getProducts,addToCart } from '../../api/product';
 import './css/ProductList.css';
 
 const ProductList = () => {
@@ -7,9 +7,10 @@ const ProductList = () => {
   const [error, setError] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [productsPerPage, setProductsPerPage] = useState(20);
-
+  const [user, setUser] = useState({});
   useEffect(() => {
     const fetchProducts = async () => {
+      setUser( JSON.parse(localStorage.getItem('userData')));
       try {
         const params = {
           limit: productsPerPage, // Số sản phẩm mỗi trang
@@ -39,7 +40,19 @@ const ProductList = () => {
     setProductsPerPage(parseInt(event.target.value, 10));
     setCurrentPage(1); // Reset to first page when limit changes
   };
-
+const addTocart = async (productId,userId,quantity) => {
+    try {
+      const cart = {
+        productId,
+        userId,
+        quantity,
+      };
+      const data = await addToCart(cart);
+      console.log(data);
+    } catch (err) {
+      setError(err.message);
+    }
+}
   return (
     <div className="product-list-container">
       <h1>Product List</h1>
@@ -57,7 +70,8 @@ const ProductList = () => {
           <div key={product._id} className="product-card">
             <h3>{product.name}</h3>
             <p>{product.description}</p>
-            <p>{product.price} USD</p>
+            <p>{product.price}-VNĐ</p>
+            <button onClick={() => addTocart(product._id,user.userId,1)}>Add to cart</button>
           </div>
         ))}
       </div>

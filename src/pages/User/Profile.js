@@ -1,8 +1,9 @@
 import React from 'react';
 
 const Profile = () => {
-  const username = localStorage.getItem('username');
-  const role = localStorage.getItem('role');
+  const userData = JSON.parse(localStorage.getItem('userData'));
+  const role=userData?.role;
+  const username=userData?.username;
 
   return (
     <div>

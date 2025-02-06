@@ -5,6 +5,9 @@ import Footer from '../components/Footer';
 import ProductList from '../pages/User/ProductList';
 import ProductDetail from '../pages/User/ProductDetail';
 import Profile from '../pages/User/Profile';
+import SearchResults from '../pages/User/search';
+import Cart from '../pages/User/Cart';
+import './css/UserLayout.css'; // Đảm bảo import CSS đã chỉnh sửa
 
 const UserLayout = () => {
   useEffect(() => {
@@ -15,15 +18,19 @@ const UserLayout = () => {
   }, []);
 
   return (
-    <>
+    <div className="layout-container"> {/* Đóng gói tất cả trong layout-container */}
       <Header />
-      <Routes>
-        <Route path="/" element={<ProductList />} />
-        <Route path="/:productId" element={<ProductDetail />} />
-        <Route path="/profile" element={<Profile />} />
-      </Routes>
+      <div className="contentUser"> {/* Thêm lớp content để chứa nội dung */}
+        <Routes>
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/" element={<ProductList />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/search" element={<SearchResults />} />
+          <Route path="/:productId" element={<ProductDetail />} />
+        </Routes>
+      </div>
       <Footer />
-    </>
+    </div>
   );
 };
 

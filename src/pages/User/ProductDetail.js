@@ -8,6 +8,7 @@ const ProductDetail = () => {
   const [error, setError] = useState('');
 
   useEffect(() => {
+    
     const fetchProduct = async () => {
       try {
         const data = await getProductById(productId);
