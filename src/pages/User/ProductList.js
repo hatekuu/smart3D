@@ -8,6 +8,7 @@ const ProductList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [productsPerPage, setProductsPerPage] = useState(20);
   const [user, setUser] = useState({});
+  const [limit,setLimit]=useState(null)
   useEffect(() => {
     const fetchProducts = async () => {
       setUser( JSON.parse(localStorage.getItem('userData')));
@@ -21,6 +22,9 @@ const ProductList = () => {
         const data = await getProducts(params);
         console.log(data);
         setProducts(data.products);
+   setLimit(Math.ceil(data.totalProducts / (productsPerPage )));
+
+
       } catch (err) {
         setError(err.message);
       }
@@ -30,10 +34,14 @@ const ProductList = () => {
   }, [currentPage, productsPerPage]);
 
   // Go to next page
-  const nextPage = () => setCurrentPage((prev) => prev + 1);
-
+  const nextPage = () => {
+    setCurrentPage((prev) => Math.min(prev + 1, limit)); // Không vượt quá limit
+  };
+  
   // Go to previous page
-  const prevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
+  const prevPage = () => {
+    setCurrentPage((prev) => Math.max(prev - 1, 1)); // Không nhỏ hơn 1
+  };
 
   // Handle change in products per page
   const handleProductsPerPageChange = (event) => {
@@ -53,6 +61,13 @@ const addTocart = async (productId,userId,quantity) => {
       setError(err.message);
     }
 }
+const handlePageChange = (event) => {
+  let page = parseInt(event.target.value, 10);
+  if (!isNaN(page)) {
+    setCurrentPage(Math.min(Math.max(page, 1), limit)); // Đảm bảo trong khoảng [1, limit]
+  }
+};
+
   return (
     <div className="product-list-container">
       <h1>Product List</h1>
@@ -75,11 +90,21 @@ const addTocart = async (productId,userId,quantity) => {
           </div>
         ))}
       </div>
-      <div className="pagination-buttons">
-        <button onClick={prevPage}>&lt;</button>
-        <span>Page {currentPage}</span>
-        <button onClick={nextPage}>&gt;</button>
-      </div>
+      <div className="pagination-buttons" >
+  <button onClick={prevPage}>&lt;</button>
+  
+  <input 
+    type="number" 
+    value={currentPage} 
+    onChange={handlePageChange} 
+    min="1" 
+    max={limit} 
+    className="page-input"
+  />
+  
+  <button onClick={nextPage}>&gt;</button>
+</div>
+
     </div>
   );
 };

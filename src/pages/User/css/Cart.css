@@ -1,0 +1,83 @@
+/* Cart.css */
+
+/* Tổng quát cho bảng */
+.table-container {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  /* Các thẻ trong bảng */
+  .table-container th,
+  .table-container td {
+    border: 1px solid black;
+    padding: 10px;
+    text-align: center;
+  }
+  
+  /* Các cột tên sản phẩm */
+  .table-container th {
+    background-color: #f0f0f0;
+    font-weight: bold;
+  }
+  
+  /* Nút xóa */
+  .remove-btn {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  
+  .remove-btn:hover {
+    background-color: #d32f2f;
+  }
+  
+  /* Tổng tiền */
+  .total-container {
+    margin-top: 20px;
+    text-align: right;
+  }
+  
+  .total-container h3 {
+    font-size: 20px;
+  }
+  .discount-container {
+    margin-top: 20px;
+  }
+  
+  .discount-container select {
+    padding: 10px;
+    font-size: 16px;
+  }
+  
+  .discount-container button {
+    margin-left: 10px;
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .discount-container button:hover {
+    background-color: #218838;
+  }
+  
+  .total-container {
+    margin-top: 20px;
+  }
+  
+  .checkout-btn {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  
+  .checkout-btn:hover {
+    background-color: #0056b3;
+  }

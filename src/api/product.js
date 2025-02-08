@@ -67,6 +67,14 @@ export const updateCart = async (cart) => {
     throw new Error(error.response?.data?.message || 'Failed to fetch products');
   }
 }
+export const getDiscount = async () => {
+  try {
+    const response = await axiosInstance.get('/product/cart/getdiscount');
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.message || 'Failed to fetch products');
+  }
+}
 export const applyDiscount = async (discount) => {
   try {
     const response = await axiosInstance.post('/product/cart/discount', discount);
@@ -75,9 +83,9 @@ export const applyDiscount = async (discount) => {
     throw new Error(error.response?.data?.message || 'Failed to fetch products');
   }
 }
-export const checkout = async (cart) => {
+export const checkout = async (discountCode) => {
   try {
-    const response = await axiosInstance.post('/product/cart/checkout', cart);
+    const response = await axiosInstance.post('/product/cart/checkout', discountCode);
     return response.data;
   } catch (error) {
     throw new Error(error.response?.data?.message || 'Failed to fetch products');
@@ -107,4 +115,4 @@ export const cancelOrder = async (order) => {
     throw new Error(error.response?.data?.message || 'Failed to fetch products');
   }
 }
-export default { getProducts, getProductById, findProduct, suggestKeyword, reviewProduct, addToCart, removeFromCart, updateCart, applyDiscount, checkout, getCart, requestReturn, cancelOrder };
+export default { getDiscount,getProducts, getProductById, findProduct, suggestKeyword, reviewProduct, addToCart, removeFromCart, updateCart, applyDiscount, checkout, getCart, requestReturn, cancelOrder };

@@ -55,5 +55,21 @@ export const getUserProfile = async () => {
     throw new Error(error.response?.data?.message || 'Failed to fetch user profile');
   }
 };
-
-export default { login, register, forgotPassword, getUserProfile };
+export const updateProfile = async (query) => {
+  try {
+  
+    const response = await axiosInstance.post('/user/profile',query);
+    return response.data;  // Trả về thông tin người dùng
+  } catch (error) {
+    throw new Error(error.response?.data?.message || 'Failed to fetch user profile');
+  }
+};
+export const deleteAddress = async (query) => {
+  try {
+    const response = await axiosInstance.post('/user/profile/delete',query);
+    return response.data;  // Trả về thông tin người dùng
+  } catch (error) {
+    throw new Error(error.response?.data?.message || 'Failed to fetch user profile');
+  }
+};
+export default { login, register, forgotPassword, getUserProfile,updateProfile,deleteAddress };

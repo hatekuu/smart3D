@@ -1,86 +1,199 @@
 import React, { useEffect, useState } from 'react';
-import { getCart, updateCart, removeFromCart, checkout, applyDiscount } from '../../api/product';
+import { getCart, updateCart, removeFromCart, checkout, applyDiscount, getDiscount } from '../../api/product';
+import {getUserProfile} from '../../api/auth'
+import './css/Cart.css'; // Import file CSS
 
 const Cart = () => {
   const [cart, setCart] = useState([]); // Khởi tạo cart với mảng rỗng
-  const user = JSON.parse(localStorage.getItem('userData'));
+  const [discounts, setDiscounts] = useState([]); // Lưu trữ các discount codes
+  const [selectedDiscount, setSelectedDiscount] = useState(null); // Discount code được chọn
+  const [discountApplied, setDiscountApplied] = useState(false); // Kiểm tra xem giảm giá đã được áp dụng chưa
+  const [addresses, setAddress] = useState([]);
+  const [selectedAddress, setSelectedAddress] = useState(null);
+  const [total,setTotal]=useState(0)
+  const user = JSON.parse(localStorage.getItem('userData')) || {};
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Gọi API để lấy giỏ hàng
         const data = await getCart(user.userId);
-        console.log(data);
+        const discountData = await getDiscount();
+        const profile= await getUserProfile()
         
-        // Cập nhật state cart với dữ liệu trả về
-        if(!data.message){
-            setCart(data);
+        console.log(profile.address)
+        if (profile.address) setAddress(profile.address);
+        if (!data.message) {
+          setCart(data);
+          // Tính tổng tiền ngay sau khi nhận dữ liệu giỏ hàng
+          const newTotal = data.reduce((sum, product) => sum + product.price * product.quantity, 0);
+          setTotal(newTotal);
         }
-       
+  
+         if (discountData.length > 0) {
+        setDiscounts(discountData.filter(discount => discount.isActive));
+      }
       } catch (error) {
         console.log(error.error);
       }
     };
+  
     fetchData();
-  }, []);
+  }, []); // Không cần phụ thuộc vào `total`, chỉ chạy một lần khi component mount.
+  
 
   // Hàm để xử lý khi muốn xóa một sản phẩm khỏi giỏ hàng
   const handleRemove = async (productId) => {
     try {
-      await removeFromCart({ userId: user.userId, productId: productId });
-      // Cập nhật lại giỏ hàng sau khi xóa
+      await removeFromCart({ userId: user.userId, productId });
       const updatedCart = cart.filter(item => item._id !== productId);
       setCart(updatedCart);
+      
+      // Cập nhật total sau khi xóa sản phẩm
+      const newTotal = updatedCart.reduce((sum, product) => sum + product.price * product.quantity, 0);
+      setTotal(newTotal);
     } catch (error) {
       console.log(error.error);
     }
   };
+  
 
   // Hàm để xử lý khi muốn cập nhật quantity của sản phẩm
   const handleUpdateQuantity = async (productId, quantity) => {
     try {
       if (quantity === 0) {
-        // Nếu quantity là 0, gọi handleRemove để xóa sản phẩm khỏi giỏ hàng
-        await handleRemove(productId);
+        // Nếu số lượng về 0, gọi API xóa trực tiếp
+        await removeFromCart({ userId: user.userId, productId });
+        setCart(cart.filter(item => item._id !== productId));
       } else {
-        // Gửi yêu cầu API để cập nhật quantity
         await updateCart({ userId: user.userId, productId, quantity });
-
-        // Cập nhật lại giỏ hàng sau khi thay đổi quantity
-        const updatedCart = cart.map((item) =>
+  
+        setCart(cart.map((item) => 
           item._id === productId ? { ...item, quantity } : item
-        );
-        setCart(updatedCart);
+        ));
       }
+      
+      // Tính lại total sau mỗi thay đổi
+      setTotal(cart.reduce((sum, item) => sum + item.price * item.quantity, 0));
+  
     } catch (error) {
       console.log(error.error);
     }
+  };
+  
+  // Hàm áp dụng discount
+  const handleApplyDiscount = async () => {
+    if (selectedDiscount) {
+      try {
+        const result = await applyDiscount({ discountCode: selectedDiscount, userId: user.userId });
+  
+        if (result.length > 0 && result[0].totalAmountWithDiscount !== undefined) {
+          setTotal(result[0].totalAmountWithDiscount);
+          setDiscountApplied(true);
+        } else {
+          alert("Invalid discount code or error applying discount.");
+        }
+      } catch (error) {
+        console.log("Error applying discount:", error);
+      }
+    } else {
+      alert("Please select a discount code.");
+    }
+  };
+  
+
+  const handleCheckout = async () => {
+    if (!selectedAddress) {
+      alert("Please select a shipping address before checkout.");
+      return;
+    }
+    const checkoutData = {
+      userId: user.userId,
+      cart,
+      address: selectedAddress,
+      ...(discountApplied && { discount: selectedDiscount }),
+    };
+    try {
+      await checkout(checkoutData);
+      window.location.href='/smart3D/products'
+    } catch (error) {
+     console.log(error) 
+    }
+   
+
   };
 
   return (
     <div>
       <h2>Your Cart</h2>
-      {cart.length === 0 ||!cart? (
+      {cart.length === 0 || !cart ? (
         <p>Your cart is empty.</p>
       ) : (
         <div>
-          {cart?.map((product) => (
-            <div key={product?._id} style={{ marginBottom: '20px' }}>
-              <h3>{product?.name}</h3>
-              <p>{product?.description}</p>
-              <p>Price: {(product?.price * product?.quantity).toLocaleString()} VND</p>
-              <p>Số Lượng: {product?.quantity}</p>
+          <table className="table-container">
+            <thead>
+              <tr>
+                <th>Product Name</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Total</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {cart.map((product) => (
+                <tr key={product._id}>
+                  <td>{product.name}</td>
+                  <td>{product.price.toLocaleString()} VND</td>
+                  <td>
+                    <input
+                      type="number"
+                      value={product.quantity}
+                      min="0"
+                      onChange={(e) => handleUpdateQuantity(product._id, parseInt(e.target.value))}
+                    />
+                  </td>
+                  <td>{(product.price * product.quantity).toLocaleString()} VND</td>
+                  <td>
+                    <button className="remove-btn" onClick={() => handleRemove(product._id)}>Remove</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
 
-              {/* Chỉnh sửa số lượng */}
-              <input
-                type="number"
-                value={product.quantity}
-                min="0"
-                onChange={(e) => handleUpdateQuantity(product?._id, parseInt(e.target.value))}
-              />
-              <button onClick={() => handleRemove(product?._id)}>Remove</button>
-            </div>
-          ))}
+          {/* Hiển thị danh sách mã giảm giá */}
+          <div className="discount-container">
+            <h3>Discount</h3>
+            <select onChange={(e) => setSelectedDiscount(e.target.value)} value={selectedDiscount}>
+              <option value="">Select a discount</option>
+              {discounts.map((discount) => (
+                <option key={discount._id} value={discount.code}>
+                  {discount.code} - {discount.discountPercentage}% off
+                </option>
+              ))}
+            </select>
+            <button onClick={handleApplyDiscount}>Apply Discount</button>
+          </div>
+               {/* Hiển thị địa chỉ */}
+          <div className="discount-container">
+            <h3>Địa Chỉ</h3>
+            <select onChange={(e) => setSelectedAddress(e.target.value)} value={selectedAddress}>
+                    <option value="">Select a address</option>
+                    {addresses.map((address, index) => (
+                      <option key={index} value={index}>
+                        {address.address} - {address.phone} - {address.note}
+                      </option>
+                    ))}
+          </select>
+
+          </div>
+          {/* Hiển thị tổng tiền */}
+          <div className="total-container">
+            <h3>Total: {total.toLocaleString()} VND</h3>
+          </div>
+
+          {/* Nút Checkout */}
+          <button onClick={handleCheckout} className="checkout-btn">Checkout</button>
         </div>
       )}
     </div>

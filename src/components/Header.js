@@ -15,7 +15,6 @@ const Header = () => {
   const dropdownRef = useRef(null); // Thêm ref cho dropdown menu
   const userData = JSON.parse(localStorage.getItem('userData'));
   const role = userData?.role;
-
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
@@ -109,14 +108,15 @@ const Header = () => {
           {isLoggedIn ? (
             <>
               {role === 'manager' && <li><Link to="/manager/upload-gcode">Upload Gcode</Link></li>}
-              <li><Link to="/products">Products</Link></li>
+              <li><Link to="/products">Sản phẩm</Link></li>
+              <li><Link to="/products/3dprint">Dịch vụ in3d</Link></li>
               <li>
                 <div className="user-menu" onClick={handleDropdownToggle}>
                   User
                   {isDropdownVisible && (
                     <div className="dropdown-menu" ref={dropdownRef}>
-                      <Link to="/products/profile" onClick={handleMenuItemClick}>Profile</Link>
-                      <Link to="/products/cart" onClick={handleMenuItemClick}>Cart</Link>
+                      <Link to="/products/profile" onClick={handleMenuItemClick}>Thôn tin cá nhân</Link>
+                      <Link to="/products/cart" onClick={handleMenuItemClick}>Giỏ Hàng</Link>
                       <LogoutButton />
                     </div>
                   )}
@@ -125,8 +125,8 @@ const Header = () => {
             </>
           ) : (
             <>
-              <li><Link to="/login">Login</Link></li>
-              <li><Link to="/register">Register</Link></li>
+              <li><Link to="/login">Đăng Nhập</Link></li>
+              <li><Link to="/register">Đăng Ký</Link></li>
             </>
           )}
         </ul>
