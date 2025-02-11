@@ -12,8 +12,9 @@ export const getProducts = async (params) => {
 
 // Get Single Product API
 export const getProductById = async (productId) => {
+
   try {
-    const response = await axiosInstance.get('/product',{productId});
+    const response = await axiosInstance.post('/product/id',{id:productId});
     return response.data;
   } catch (error) {
     throw new Error(error.response?.data?.message || 'Failed to fetch product');
@@ -115,4 +116,21 @@ export const cancelOrder = async (order) => {
     throw new Error(error.response?.data?.message || 'Failed to fetch products');
   }
 }
-export default { getDiscount,getProducts, getProductById, findProduct, suggestKeyword, reviewProduct, addToCart, removeFromCart, updateCart, applyDiscount, checkout, getCart, requestReturn, cancelOrder };
+export const getUserOrders = async (userId) => {
+  try {
+    const response = await axiosInstance.post('/product/order', {userId:userId});
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.message || 'Failed to fetch order');
+  }
+}
+export const confirmReceived = async (confirm) => {
+  try {
+    const response = await axiosInstance.post('/product/confirm', confirm);
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.message || 'Failed to confirm');
+  }
+}
+export default { getDiscount,getProducts, getProductById, findProduct, suggestKeyword, reviewProduct, addToCart, removeFromCart, updateCart, applyDiscount, checkout, getCart, 
+  requestReturn, cancelOrder,getUserOrders,confirmReceived };

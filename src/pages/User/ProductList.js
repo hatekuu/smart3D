@@ -9,6 +9,7 @@ const ProductList = () => {
   const [productsPerPage, setProductsPerPage] = useState(20);
   const [user, setUser] = useState({});
   const [limit,setLimit]=useState(null)
+  const [notification, setNotification] = useState('');
   useEffect(() => {
     const fetchProducts = async () => {
       setUser( JSON.parse(localStorage.getItem('userData')));
@@ -20,11 +21,8 @@ const ProductList = () => {
           order: 'asc', // Thứ tự tăng dần
         };
         const data = await getProducts(params);
-        console.log(data);
         setProducts(data.products);
    setLimit(Math.ceil(data.totalProducts / (productsPerPage )));
-
-
       } catch (err) {
         setError(err.message);
       }
@@ -48,7 +46,7 @@ const ProductList = () => {
     setProductsPerPage(parseInt(event.target.value, 10));
     setCurrentPage(1); // Reset to first page when limit changes
   };
-const addTocart = async (productId,userId,quantity) => {
+const addTocart = async (productId,userId,quantity,productName) => {
     try {
       const cart = {
         productId,
@@ -56,7 +54,8 @@ const addTocart = async (productId,userId,quantity) => {
         quantity,
       };
       const data = await addToCart(cart);
-      console.log(data);
+      setNotification(`${data.message} sản phẩm ${productName}`); // Hiển thị thông báo
+        setTimeout(() => setNotification(''), 3000); // Ẩn sau 2 giây
     } catch (err) {
       setError(err.message);
     }
@@ -69,8 +68,9 @@ const handlePageChange = (event) => {
 };
 
   return (
+    <div className='product-list'>
     <div className="product-list-container">
-      <h1>Product List</h1>
+      <h1>Danh mục sản phẩm</h1>
       {error && <p>{error}</p>}
       <div className="controls">
         <label htmlFor="productsPerPage">Products per page:</label>
@@ -85,8 +85,9 @@ const handlePageChange = (event) => {
           <div key={product._id} className="product-card">
             <h3>{product.name}</h3>
             <p>{product.description}</p>
-            <p>{product.price}-VNĐ</p>
-            <button onClick={() => addTocart(product._id,user.userId,1)}>Add to cart</button>
+            <p>Số lượng: {product.stock > 0 ? product.stock : <span style={{ color: 'red' }}>Hết hàng</span>}</p>
+            <p>{product.price.toLocaleString('vi-VN')} VND</p>
+            <button onClick={() => addTocart(product._id,user.userId,1,product.name)}>Thêm vào giỏ hàng</button>
           </div>
         ))}
       </div>
@@ -104,8 +105,9 @@ const handlePageChange = (event) => {
   
   <button onClick={nextPage}>&gt;</button>
 </div>
+{notification && <div className="notification">{notification}</div>}
 
-    </div>
+    </div></div>
   );
 };
 

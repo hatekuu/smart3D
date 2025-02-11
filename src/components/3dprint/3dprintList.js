@@ -11,7 +11,7 @@ const Print3DList = ({ printers, setPrinterId }) => {
             <p>Type: {printer.Printer.Type}</p>
             <p>Size: {printer.Printer.Size}</p>
             <p>Color: {printer.Printer.Color}</p>
-            <button onClick={() => setPrinterId(printer._id)}>Select Printer</button>
+            <button onClick={() => setPrinterId(printer._id)}>Chọn máy in</button>
           </div>
         ))}
       </div>

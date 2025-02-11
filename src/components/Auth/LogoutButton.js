@@ -1,6 +1,7 @@
 import React from 'react';
 import axiosInstance from '../../api/axios'; // Import axios instance
 import { Link } from 'react-router-dom';
+import { FaSignOutAlt } from "react-icons/fa";
 const LogoutButton = () => {
   const handleLogout = async () => {
     try {
@@ -20,8 +21,8 @@ const LogoutButton = () => {
   };
 
   return (
-    <Link onClick={handleLogout} className="logout-button">
-      Logout
+    <Link onClick={handleLogout} className="dropdown-link">
+       <FaSignOutAlt size={20} />Đăng Xuất
     </Link>
   );
 };

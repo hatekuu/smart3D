@@ -1,0 +1,114 @@
+/* UploadFile.css */
+
+/* Container for the entire upload section */
+.upload-stl-container {
+  padding: 20px;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin: 10px;
+  max-width: 600px; /* Optional: Adjust container width */
+  margin: 0 auto;
+}
+
+.upload-stl-container h2 {
+  font-size: 24px;
+  color: #333;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.upload-stl-container input[type="text"] {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-top: 10px;
+  font-size: 14px;
+  color: #555;
+  box-sizing: border-box;
+}
+
+.upload-stl-container input[type="file"] {
+  display: none;
+}
+
+.upload-stl-container ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 20px 0;
+}
+
+.upload-stl-container ul li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #fff;
+  margin-bottom: 8px;
+  font-size: 16px;
+}
+
+.upload-stl-container ul li input[type="number"] {
+  width: 60px;
+  padding: 5px;
+  font-size: 14px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  margin-left: 10px;
+}
+
+.upload-stl-container button {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-top: 15px;
+  width: 100%;
+  transition: background-color 0.3s ease;
+}
+
+.upload-stl-container button:disabled {
+  background-color: #ddd;
+  cursor: not-allowed;
+}
+
+.upload-stl-container button:hover:not(:disabled) {
+  background-color: #45a049;
+}
+
+.upload-stl-container .FaFileAlt {
+  font-size: 24px;
+  margin-right: 10px;
+  color: #4CAF50;
+}
+
+.upload-stl-container button {
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-top: 15px;
+  width: 100%;
+  transition: background-color 0.3s ease;
+}
+
+.upload-stl-container button:hover:not(:disabled) {
+  background-color: #0056b3;
+}
+
+.upload-stl-container p {
+  color: #333;
+  font-size: 16px;
+  font-weight: 500;
+  text-align: center;
+}

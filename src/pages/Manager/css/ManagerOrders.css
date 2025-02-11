@@ -1,0 +1,72 @@
+.manager-orders {
+    max-width: 900px;
+    margin: auto;
+    padding: 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .manager-orders h2 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .orders-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .orders-table th, .orders-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .orders-table th {
+    background: #f4f4f4;
+  }
+  
+  .status {
+    font-weight: bold;
+    padding: 4px 8px;
+    border-radius: 4px;
+  }
+  
+  .status.pending { color: #ff9800; }
+  .status.cancelled { color: #f44336; }
+  .status.processing { color: #007bff; }
+  .status.shipped { color: #2196f3; }
+  .status.completed { color: #4caf50; }
+  
+  .manager-orders button {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 5px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  
+  .confirm-btn {
+    background: #4caf50;
+    color: white;
+  }
+  
+  .cancel-btn {
+    background: #f44336;
+    color: white;
+  }
+  
+  .shipped-btn {
+    background: #2196f3;
+    color: white;
+  }
+  
+  .manager-orders button:hover {
+    opacity: 0.8;
+  }
+  

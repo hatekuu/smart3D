@@ -8,6 +8,7 @@ import Profile from '../pages/User/Profile';
 import SearchResults from '../pages/User/search';
 import Cart from '../pages/User/Cart';
 import Print3D from '../pages/User/Print3D';
+import Bills from '../pages/User/Bills';
 import './css/UserLayout.css'; // Đảm bảo import CSS đã chỉnh sửa
 
 const UserLayout = () => {
@@ -24,6 +25,7 @@ const UserLayout = () => {
       <div className="contentUser"> {/* Thêm lớp content để chứa nội dung */}
         <Routes>
           <Route path="/cart" element={<Cart />} />
+          <Route path="/bills" element={<Bills />} />
           <Route path="/3dprint" element={<Print3D />} />
           <Route path="/" element={<ProductList />} />
           <Route path="/profile" element={<Profile />} />

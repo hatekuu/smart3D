@@ -72,4 +72,5 @@ export const deleteAddress = async (query) => {
     throw new Error(error.response?.data?.message || 'Failed to fetch user profile');
   }
 };
+
 export default { login, register, forgotPassword, getUserProfile,updateProfile,deleteAddress };

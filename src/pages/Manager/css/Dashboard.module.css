@@ -1,0 +1,61 @@
+.dashboardContainer {
+    padding: 60px;
+    text-align: center;
+  }
+  
+  /* Hero Section */
+  .hero {
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    color: white;
+    padding: 70px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .hero h1 {
+    font-size: 28px;
+    margin-bottom: 10px;
+  }
+  
+  .hero p {
+    font-size: 16px;
+  }
+  
+  /* Thống kê */
+  .statsContainer {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  
+  .statCard {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.15);
+    text-align: center;
+    min-width: 160px;
+    flex: 1;
+    max-width: 250px;
+  }
+  
+  .statCard h3 {
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 5px;
+  }
+  
+  .statCard p {
+    font-size: 20px;
+    font-weight: bold;
+    color: #007bff;
+  }
+  
+  /* Icons */
+  .icon {
+    font-size: 32px;
+    color: #007bff;
+    margin-bottom: 10px;
+  }
+  

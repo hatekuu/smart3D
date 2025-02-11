@@ -43,7 +43,8 @@ const SearchResults = () => {
             <div key={product._id} className="product-card">
             
               <h3>{product.name}</h3>
-              <p>{product.price} VND</p>
+              <p>{product.price.toLocaleString('vi-VN')} VND</p>
+              <p>Số lượng: {product.stock > 0 ? product.stock : <span style={{ color: 'red' }}>Hết hàng</span>}</p>
               <button onClick={ async(e) => {
                 try {
                   const cart = {

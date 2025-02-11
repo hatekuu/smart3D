@@ -1,8 +1,10 @@
 import React, { useEffect, useState, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { getUserProfile } from '../api/auth';
 import { suggestKeyword } from '../api/product';
 import LogoutButton from './Auth/LogoutButton';
+import { FaUpload, FaBoxOpen, FaShoppingCart, FaUser, FaSignInAlt, FaUserPlus,FaHome,FaClipboardList} from 'react-icons/fa';
 import './css/Header.css';
 
 const Header = () => {
@@ -15,6 +17,9 @@ const Header = () => {
   const dropdownRef = useRef(null); // Thêm ref cho dropdown menu
   const userData = JSON.parse(localStorage.getItem('userData'));
   const role = userData?.role;
+  const location = useLocation();
+  const isProductPage = location.pathname.startsWith('/products')||location.pathname.startsWith('/manager/products'); // Kiểm tra router
+
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
@@ -47,12 +52,18 @@ const Header = () => {
 
   const handleSubmit = () => {
     if (searchTerm.trim() !== '') {
+      if(role==='user')
       window.location.href = `/smart3D/products/search?query=${encodeURIComponent(searchTerm)}`;
+      if(role==='manager')
+        window.location.href = `/smart3D/manager/products/search?query=${encodeURIComponent(searchTerm)}`;
     }
   };
   
   const handleSuggestionClick = (keyword) => {
-    window.location.href = `/smart3D/products/search?query=${encodeURIComponent(keyword)}`;
+          if(role==='user')
+      window.location.href = `/smart3D/products/search?query=${encodeURIComponent(keyword)}`;
+      if(role==='manager')
+        window.location.href = `/smart3D/manager/products/search?query=${encodeURIComponent(keyword)}`;
   };
 
   const handleDropdownToggle = (e) => {
@@ -65,70 +76,129 @@ const Header = () => {
   };
 
   return (
-    <div className="header-container">
-      <div className="left">
-        <Link to="/" className="logo">Home</Link>
-        <div className="search-container">
-          <input
-            type="text"
-            placeholder="Search"
-            value={searchTerm}
-            onChange={async (e) => {
-              const keyword = e.target.value;
-              setSearchTerm(keyword);
-              if (keyword.trim() !== '') {
-                try {
-                  const suggestions = await suggestKeyword(keyword);
-                  setSuggestions(suggestions); // Cập nhật gợi ý
-                  setIsMenuVisible(true); // Hiển thị menu gợi ý
-                } catch (error) {
-                  console.error(error);
+    <div className="header-container icon">
+         <div className="left">
+       {role==='user'&&( <Link to="/" className="logo">
+          <FaHome /> Trang Chủ
+        </Link>)}
+        {role==='manager'&&( <Link to="/manager" className="logo">
+          <FaHome /> Trang Chủ
+        </Link>)}
+        {isProductPage && ( // Chỉ hiển thị thanh tìm kiếm nếu đang ở trang sản phẩm
+          <div className="search-container">
+            <input
+              type="text"
+              placeholder="Search"
+              value={searchTerm}
+              onChange={async (e) => {
+                const keyword = e.target.value;
+                setSearchTerm(keyword);
+                if (keyword.trim() !== '') {
+                  try {
+                    const suggestions = await suggestKeyword(keyword);
+                    console.log(suggestions);
+                    setSuggestions(suggestions);
+                    setIsMenuVisible(true);
+                  } catch (error) {
+                    console.error(error);
+                  }
+                } else {
+                  setSuggestions([]);
+                  setIsMenuVisible(false);
                 }
-              } else {
-                setSuggestions([]);
-                setIsMenuVisible(false); // Ẩn menu nếu không có từ khóa
-              }
-            }}
-            onKeyDown={handleSearch}
-          />
-          {isMenuVisible && suggestions.length > 0 && (
-            <ul className="suggestion-list" ref={menuRef}>
-              {suggestions.map((item, index) => (
-                <li key={index} onClick={() => handleSuggestionClick(item)}>
-                  {item}
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-        <button type="submit" onClick={handleSubmit}>Search</button>
+              }}
+              onKeyDown={handleSearch}
+            />
+            {isMenuVisible && suggestions.length > 0 && (
+              <ul className="suggestion-list" ref={menuRef}>
+                {suggestions.map((item, index) => (
+                  <li key={index} onClick={() => handleSuggestionClick(item)}>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        )}
+        {isProductPage && <button type="submit" onClick={handleSubmit}>Search</button>}
       </div>
       <nav className="right">
         <ul>
-          {isLoggedIn ? (
-            <>
-              {role === 'manager' && <li><Link to="/manager/upload-gcode">Upload Gcode</Link></li>}
-              <li><Link to="/products">Sản phẩm</Link></li>
-              <li><Link to="/products/3dprint">Dịch vụ in3d</Link></li>
-              <li>
-                <div className="user-menu" onClick={handleDropdownToggle}>
-                  User
-                  {isDropdownVisible && (
-                    <div className="dropdown-menu" ref={dropdownRef}>
-                      <Link to="/products/profile" onClick={handleMenuItemClick}>Thôn tin cá nhân</Link>
-                      <Link to="/products/cart" onClick={handleMenuItemClick}>Giỏ Hàng</Link>
-                      <LogoutButton />
-                    </div>
-                  )}
-                </div>
-              </li>
-            </>
-          ) : (
-            <>
-              <li><Link to="/login">Đăng Nhập</Link></li>
-              <li><Link to="/register">Đăng Ký</Link></li>
-            </>
-          )}
+        {isLoggedIn ? (
+                      <>
+                        {role === 'manager' && (
+                          <li>
+                            <Link to="/manager/upload-gcode" className="nav-link">
+                              <FaUpload /> Upload Gcode
+                            </Link>
+                          </li>
+                        )}
+                       
+                        {role === 'manager' && (
+                          <li>
+                            <Link to="/manager/products" className="nav-link">
+                              <FaBoxOpen /> Sản phẩm
+                            </Link>
+                          </li>
+                        )}
+                        {role === 'user' && (
+                          <li>
+                            <Link to="/products/3dprint" className="nav-link">
+                              <FaBoxOpen /> Dịch vụ
+                            </Link>
+                            <Link to="/products" className="nav-link">
+                              <FaBoxOpen /> Sản phẩm
+                            </Link>
+                          </li>
+                        )}
+                        <li>
+                          <div className="user-menu" onClick={handleDropdownToggle}>
+                            <FaUser /> Cá nhân
+                            {isDropdownVisible && (
+                              <div className="dropdown-menu" ref={dropdownRef}>
+                                <Link to="/products/profile" className="dropdown-link" onClick={handleMenuItemClick}>
+                                  <FaUser /> Thông tin cá nhân
+                                </Link>
+                                {role === 'user' && (
+                                  <>
+                                  <Link to="/products/cart" className="dropdown-link" onClick={handleMenuItemClick}>
+                                    <FaShoppingCart /> Giỏ Hàng
+                                  </Link>
+                                  <Link to="/products/bills" className="dropdown-link" onClick={handleMenuItemClick}>
+                                    <FaClipboardList /> Đơn mua
+                                  </Link>
+                                  </>
+                                )}
+                                 {role === 'manager' && (
+                                  <>
+                                    <Link to="/manager/bills" className="dropdown-link" onClick={handleMenuItemClick}>
+                                    <FaClipboardList /> Đơn hàng
+                                  </Link>
+                                  
+                                  </>
+                                
+                                )}
+
+                                <LogoutButton />
+                              </div>
+                            )}
+                          </div>
+                        </li>
+                      </>
+                    ) : (
+                      <>
+                        <li>
+                          <Link to="/login" className="nav-link">
+                            <FaSignInAlt /> Đăng Nhập
+                          </Link>
+                        </li>
+                        <li>
+                          <Link to="/register" className="nav-link">
+                            <FaUserPlus /> Đăng Ký
+                          </Link>
+                        </li>
+                      </>
+                    )}
         </ul>
       </nav>
     </div>

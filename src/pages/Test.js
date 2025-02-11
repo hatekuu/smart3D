@@ -54,9 +54,10 @@ const GCodeDiffViewer = () => {
 
     processChunk();
   };
-
+  
   return (
     <div className="p-4 bg-gray-100 min-h-screen">
+      
       <h2 className="text-xl font-bold mb-4">G-code Diff Viewer</h2>
       <div className="flex space-x-4 mb-4">
         <input type="file" onChange={(e) => handleFileUpload(e, setFile1Lines)} />

@@ -23,12 +23,57 @@ export const getPrinter = async ()=>{
     throw new Error(error.response?.data?.message || 'Failed to get printer');
   }
 }
-export const uploadStlChunk = async (query)=>{
+export const uploadStl = async (file, fileName, printId,userId,fileId,quantity) => {
   try {
-    const response= await axiosInstance.post('/3dprint/uploadStl',query)
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('fileId', fileId);
+    formData.append('fileName', fileName);
+    formData.append('printId', printId);
+    formData.append('userId', userId);
+    formData.append('quantity', quantity);
+    const response = await axiosInstance.post('/3dprint/upload', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.message || 'Failed to upload file');
+  }
+};
+export const processGcodePricing = async (query)=>{
+  try {
+    const response= await axiosInstance.post('/3dprint/gcodepricing',query)
     return response.data
   } catch (error) {
-    throw new Error(error.response?.data?.message || 'Failed to get upload');
+    throw new Error(error.response?.data?.message || 'Failed to query');
   }
 }
-export default { uploadFile ,getPrinter };
+export const confirmOrder = async (query)=>{
+  try {
+    const response= await axiosInstance.post('/3dprint/confirm-order',query)
+    return response.data
+  } catch (error) {
+    throw new Error(error.response?.data?.message || 'Failed to query');
+  }
+}
+export const downloadStl = async (query)=>{
+  try {
+    const response= await axiosInstance.post('/3dprint/download-stl',query)
+    return response.data
+  } catch (error) {
+    throw new Error(error.response?.data?.message || 'Failed to query');
+  }
+}
+export const confirmDonwload = async (query)=>{
+  try {
+    const response= await axiosInstance.post('/3dprint/confirm-download',query)
+    return response.data
+  } catch (error) {
+    throw new Error(error.response?.data?.message || 'Failed to query');
+  }
+}
+
+export default { uploadFile ,getPrinter,confirmOrder,processGcodePricing,uploadStl ,downloadStl,confirmDonwload};

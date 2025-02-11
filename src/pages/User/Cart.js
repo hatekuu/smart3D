@@ -124,26 +124,26 @@ const Cart = () => {
 
   return (
     <div>
-      <h2>Your Cart</h2>
+   
       {cart.length === 0 || !cart ? (
-        <p>Your cart is empty.</p>
+        <p>Giỏ hàng trống.</p>
       ) : (
         <div>
           <table className="table-container">
             <thead>
               <tr>
-                <th>Product Name</th>
-                <th>Price</th>
-                <th>Quantity</th>
-                <th>Total</th>
-                <th>Action</th>
+                <th>Tên sản phẩm</th>
+                <th>Giá</th>
+                <th>Số lượng</th>
+                <th>Tổng tiền sản phẩm</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
               {cart.map((product) => (
                 <tr key={product._id}>
                   <td>{product.name}</td>
-                  <td>{product.price.toLocaleString()} VND</td>
+                  <td>{product.price.toLocaleString('vi-VN')} VND</td>
                   <td>
                     <input
                       type="number"
@@ -152,9 +152,9 @@ const Cart = () => {
                       onChange={(e) => handleUpdateQuantity(product._id, parseInt(e.target.value))}
                     />
                   </td>
-                  <td>{(product.price * product.quantity).toLocaleString()} VND</td>
+                  <td>{(product.price * product.quantity).toLocaleString('vi-VN')} VND</td>
                   <td>
-                    <button className="remove-btn" onClick={() => handleRemove(product._id)}>Remove</button>
+                    <button className="remove-btn" onClick={() => handleRemove(product._id)}>Xóa sản phẩm</button>
                   </td>
                 </tr>
               ))}
@@ -163,22 +163,22 @@ const Cart = () => {
 
           {/* Hiển thị danh sách mã giảm giá */}
           <div className="discount-container">
-            <h3>Discount</h3>
+       
             <select onChange={(e) => setSelectedDiscount(e.target.value)} value={selectedDiscount}>
-              <option value="">Select a discount</option>
+              <option value="">Chọn mã giảm giá</option>
               {discounts.map((discount) => (
                 <option key={discount._id} value={discount.code}>
                   {discount.code} - {discount.discountPercentage}% off
                 </option>
               ))}
             </select>
-            <button onClick={handleApplyDiscount}>Apply Discount</button>
+            <button onClick={handleApplyDiscount}>Áp dụng mã giảm giá</button>
           </div>
                {/* Hiển thị địa chỉ */}
           <div className="discount-container">
             <h3>Địa Chỉ</h3>
             <select onChange={(e) => setSelectedAddress(e.target.value)} value={selectedAddress}>
-                    <option value="">Select a address</option>
+                    <option value="">Chọn địa chỉ</option>
                     {addresses.map((address, index) => (
                       <option key={index} value={index}>
                         {address.address} - {address.phone} - {address.note}
@@ -189,11 +189,11 @@ const Cart = () => {
           </div>
           {/* Hiển thị tổng tiền */}
           <div className="total-container">
-            <h3>Total: {total.toLocaleString()} VND</h3>
+            <h3>Tổng tiền: {total.toLocaleString('vi-VN')} VND</h3>
           </div>
 
           {/* Nút Checkout */}
-          <button onClick={handleCheckout} className="checkout-btn">Checkout</button>
+          <button onClick={handleCheckout} className="checkout-btn">Đặt hàng</button>
         </div>
       )}
     </div>

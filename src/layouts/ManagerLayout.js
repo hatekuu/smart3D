@@ -5,24 +5,30 @@ import Footer from '../components/Footer';
 import Dashboard from '../pages/Manager/Dashboard';
 import ProductList from '../pages/Manager/ProductList';
 import UploadGcode from '../pages/Manager/UploadGcode';
+import SearchResults from '../pages/Manager/search';
+import Bills from '../pages/Manager/Bills';
 const ManagerLayout = () => {
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem('userData'));
     if (!userData || userData.role !== 'manager') {
-      window.location.href = '/products';  // Redirect to user route if not a manager
+      window.location.href = '/smart3D/products';  // Redirect to user route if not a manager
     }
   }, []);
 
   return (
-    <>
+    <div className="layout-container">
       <Header />
+      <div className="contentUser">
       <Routes>
         <Route path="/" element={<Dashboard />} />
+        <Route path="/bills" element={<Bills />} />
         <Route path="/products" element={<ProductList />} />
         <Route path="/upload-gcode" element={<UploadGcode />} />
+        <Route path="/products/search" element={<SearchResults />} />
       </Routes>
+      </div>
       <Footer />
-    </>
+    </div>
   );
 };
 
