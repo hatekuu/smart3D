@@ -60,7 +60,7 @@ const UploadFile = ({ user, printId }) => {
       for (const file of files) {
         const chunkSize = 2 * 1024 * 1024; // 2MB mỗi chunk
         const totalChunks = Math.ceil(file.size / chunkSize);
-        const uploadUrl = 'http://localhost:5000/api/3dprint/upload';
+        const uploadUrl = `${process.env.REACT_APP_API_URL}/3dprint/upload`;
 
         const fileId = generateFileId();
         const quantity = quantities[file.name] || 1;
