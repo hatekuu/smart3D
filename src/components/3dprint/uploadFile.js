@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
-import { uploadStl } from '../../api/3dprint'; // Import API đã có
+import { uploadStl } from '../../api/3dprint'; // Import hàm API
 import './css/UploadFile.css';
-import axios from 'axios';
+
 const UploadFile = ({ user, printId }) => {
   const [uploading, setUploading] = useState(false);
   const [files, setFiles] = useState([]);
@@ -22,7 +22,6 @@ const UploadFile = ({ user, printId }) => {
       setFiles((prevFiles) => [...prevFiles, ...selectedFiles]);
       setFileNames((prevNames) => [...prevNames, ...selectedFiles.map((file) => file.name)]);
 
-      // Cập nhật số lượng mặc định là 1
       setQuantities((prevQuantities) => {
         const newQuantities = { ...prevQuantities };
         selectedFiles.forEach((file) => {
@@ -51,54 +50,50 @@ const UploadFile = ({ user, printId }) => {
       setMessage('❌ Vui lòng chọn file trước khi upload.');
       return;
     }
-    
+
     setUploading(true);
     setMessage('');
     const userId = user.userId;
+    const fileId = generateFileId();
 
     try {
       for (const file of files) {
-        const chunkSize = 2 * 1024 * 1024; // 2MB mỗi chunk
+        const chunkSize = 1 * 1024 * 1024; // 2MB mỗi chunk
         const totalChunks = Math.ceil(file.size / chunkSize);
-        const uploadUrl = 'https://smartprinting.vercel.app/api/3dprint/upload';
-
-        const fileId = generateFileId();
+    
         const quantity = quantities[file.name] || 1;
         let start = 0;
-    for (let i = 0; i < totalChunks; i++) {
-      const chunk = file.slice(start, start + chunkSize);
-      start += chunkSize;
 
-      const formData = new FormData();
-      formData.append('file', chunk);
-      formData.append('fileName', file.name);  // ✅ Đổi filename → fileName
-      formData.append('chunkIndex', i); // ✅ Đổi index → chunkIndex
-      formData.append('totalChunks', totalChunks);
-      formData.append('fileId', fileId);
-      formData.append('quantity', quantity);
-      formData.append('userId', userId);
-      formData.append('printId', printId);
-      console.log(`Uploading chunk ${i + 1}/${totalChunks}...`, {
-        fileName: file.name,
-        chunkIndex: i,
-        totalChunks: totalChunks
-      });
-      try {
-        await axios.post(uploadUrl, formData, {
-          headers: { 'Content-Type': 'multipart/form-data' },
-        });
-      } catch (error) {
-        console.error('Error uploading chunk', error);
-  
-        return;
-      }
-    
-    }
+        for (let i = 0; i < totalChunks; i++) {
+          const chunk = file.slice(start, start + chunkSize);
+          start += chunkSize;
 
-      
+          const formData = new FormData();
+          formData.append('file', chunk);
+          formData.append('fileName', file.name);
+          formData.append('chunkIndex', i);
+          formData.append('totalChunks', totalChunks);
+          formData.append('fileId', fileId);
+          formData.append('quantity', quantity);
+          formData.append('userId', userId);
+          formData.append('printId', printId);
+
+          console.log(`Uploading chunk ${i + 1}/${totalChunks}...`, {
+            fileName: file.name,
+            chunkIndex: i,
+            totalChunks: totalChunks
+          });
+
+          try {
+            await uploadStl(formData);
+          } catch (error) {
+            console.error('Error uploading chunk', error);
+            return;
+          }
+        }
       }
       setMessage('✅ Tất cả file đã được tải lên thành công!');
-      setFiles([]); // Xóa danh sách file sau khi upload thành công
+      setFiles([]);
       setFileNames([]);
       setQuantities({});
     } catch (error) {

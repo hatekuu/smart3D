@@ -7,6 +7,7 @@ import ProductList from '../pages/Manager/ProductList';
 import UploadGcode from '../pages/Manager/UploadGcode';
 import SearchResults from '../pages/Manager/search';
 import Bills from '../pages/Manager/Bills';
+import PrintControll from '../pages/Manager/3dPrintControll';
 const ManagerLayout = () => {
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem('userData'));
@@ -24,6 +25,7 @@ const ManagerLayout = () => {
         <Route path="/bills" element={<Bills />} />
         <Route path="/products" element={<ProductList />} />
         <Route path="/upload-gcode" element={<UploadGcode />} />
+        <Route path="/controll" element={<PrintControll />} />
         <Route path="/products/search" element={<SearchResults />} />
       </Routes>
       </div>

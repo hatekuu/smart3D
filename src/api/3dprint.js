@@ -2,13 +2,12 @@ import axiosInstance from './axios';
 
 
 // Get Single Product API
-export const uploadFile = async (fileName,fileContent,printId) => {
+export const uploadFile = async (fileName,fileContent,process) => {
   try {
     const response = await axiosInstance.post('/3dprint/uploadFile',{
         fileName,
         fileContent,
-        printId
-       
+        process
     });
     return response.data;
   } catch (error) {
@@ -24,16 +23,9 @@ export const getPrinter = async ()=>{
   }
 }
 
-export const uploadStl  = async (file, fileName, printId, userId, fileId, quantity) => {
+export const uploadStl  = async (formData) => {
   try {
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('fileName', fileName);
-    formData.append('printId', printId);
-    formData.append('userId', userId);
-    formData.append('fileId', fileId);
-    formData.append('quantity', quantity);
-
+   
     // Gửi formData lên backend
     const response = await axiosInstance.post('/3dprint/upload', formData, {
       headers: {
@@ -45,7 +37,7 @@ export const uploadStl  = async (file, fileName, printId, userId, fileId, quanti
     return response.data;
   } catch (error) {
     // Nếu có lỗi, ném lỗi và thông báo
-    throw new Error(error.response?.data?.message || 'Failed to upload file');
+    throw new Error(error.response?.data || 'Failed to upload file');
   }
 };
 
@@ -54,15 +46,16 @@ export const processGcodePricing = async (query)=>{
     const response= await axiosInstance.post('/3dprint/gcodepricing',query)
     return response.data
   } catch (error) {
-    throw new Error(error.response?.data?.message || 'Failed to query');
+    throw new Error(error.response?.data || 'Failed to query');
   }
 }
 export const confirmOrder = async (query)=>{
+  console.log(query)
   try {
     const response= await axiosInstance.post('/3dprint/confirm-order',query)
     return response.data
   } catch (error) {
-    throw new Error(error.response?.data?.message || 'Failed to query');
+    console.log(error.data)
   }
 }
 export const downloadStl = async (query)=>{
@@ -73,7 +66,7 @@ export const downloadStl = async (query)=>{
     throw new Error(error.response?.data?.message || 'Failed to query');
   }
 }
-export const confirmDonwload = async (query)=>{
+export const confirmDownload = async (query)=>{
   try {
     const response= await axiosInstance.post('/3dprint/confirm-download',query)
     return response.data
@@ -81,5 +74,20 @@ export const confirmDonwload = async (query)=>{
     throw new Error(error.response?.data?.message || 'Failed to query');
   }
 }
-
-export default { uploadFile ,getPrinter,confirmOrder,processGcodePricing,uploadStl  ,downloadStl,confirmDonwload};
+export const updateStatus = async (query)=>{
+  try {
+    const response= await axiosInstance.post('/3dprint/updateStatus',query)
+    return response.data
+  } catch (error) {
+    throw new Error(error.response?.data?.message || 'Failed to query');
+  }
+}
+export const getFilePrint = async (query)=>{
+  try {
+    const response= await axiosInstance.post('/3dprint/getFile',query)
+    return response.data
+  } catch (error) {
+    throw new Error(error.response?.data?.message || 'Failed to query');
+  }
+}
+export default { uploadFile ,getPrinter,confirmOrder,processGcodePricing,uploadStl  ,downloadStl,confirmDownload,updateStatus};

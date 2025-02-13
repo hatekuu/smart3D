@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getUserOrders, cancelOrder, confirmReceived } from "../../api/product";
 import { processGcodePricing, confirmOrder } from "../../api/3dprint";
-import { FaTrash, FaCheckCircle, FaCalculator, FaCheck } from "react-icons/fa";
+import { FaTrash, FaCheckCircle, FaCheck } from "react-icons/fa";
 import "./css/Bills.css"; // Import file CSS
 
 const Bills = () => {
@@ -18,7 +18,11 @@ const Bills = () => {
   const fetchOrders = async () => {
     try {
       const data = await getUserOrders(user.userId);
+      if(data.length>0){
+
+  
       setBills(data);
+    }
       console.log(data)
     } catch (error) {
       console.log("Lỗi khi lấy đơn hàng:", error);
@@ -54,8 +58,10 @@ const Bills = () => {
     setLoading(true);
     try {
       const response = await processGcodePricing({ userId: user.userId });
-      console.log(response)
+      console.log("giá",response)
+      if(response.pricing){
       setPricingResult(response.pricing); // Lưu kết quả
+    }
     } catch (error) {
       console.log("Lỗi khi tính giá G-code:", error);
     }
@@ -63,10 +69,13 @@ const Bills = () => {
   };
 
   // Function xác nhận đơn hàng sau khi có giá
-  const handleConfirmOrder = async (fileId, fileName, price,printId) => {
+  const handleConfirmOrder = async (fileId, fileName, price,printId,gcodeId) => {
     setLoading(true);
+  
     try {
+
       await confirmOrder({
+        gcodeId,
         fileId,
         printId: printId, // Giả lập printId
         userId: user.userId,
@@ -103,11 +112,14 @@ const Bills = () => {
   return (
     <div className="bills-container">
       <h2 className="bills-title">📦 Danh sách đơn hàng</h2>
-
-    
-
-      {/* 🔹 Hiển thị kết quả tính giá */}
-      {pricingResult && (
+      {loading ? (
+  <div>
+    đang tải...
+  </div>
+) : (
+  <div>
+     {/* 🔹 Hiển thị kết quả tính giá */}
+     {pricingResult && (
         <div className="pricing-result">
           <h3>💰 Các file gcode hiện có</h3>
           <ul>
@@ -116,7 +128,7 @@ const Bills = () => {
                 {item.fileName} - <strong>{item.price.toLocaleString('vi-VN')} VND</strong>
                 <button
                   className="bills-btn confirm"
-                  onClick={() => handleConfirmOrder(item.fileId, item.fileName, item.price,item.printId)}
+                  onClick={() => handleConfirmOrder(item.fileId, item.fileName, item.price,item.printId,item.gcodeId)}
                   disabled={loading}
                 >
                   <FaCheck className="bill-icon" /> Xác nhận đơn
@@ -154,6 +166,9 @@ const Bills = () => {
           ))}
         </ul>
       )}
+  </div>
+)}
+     
     </div>
   );
 };

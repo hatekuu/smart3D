@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { downloadStl ,confirmDonwload} from '../../../../api/3dprint';
+import { downloadStl, confirmDownload } from '../../../../api/3dprint';
 import '../../css/UploadGcode.css';
 
 const DownloadSTL = () => {
   const [downloadedFiles, setDownloadedFiles] = useState([]);
+  const [id, setId] = useState('');
 
   useEffect(() => {
     fetchData();
@@ -12,6 +13,7 @@ const DownloadSTL = () => {
   const fetchData = async () => {
     try {
       const data = await downloadStl();
+      setId(data._id);
       if (data.files && Array.isArray(data.files)) {
         const files = data.files.map(file => ({
           fileName: file.fileName,
@@ -24,39 +26,43 @@ const DownloadSTL = () => {
     }
   };
 
-  const getDownloadLink = (url) => {
-    const fileId = url.split("/d/")[1]?.split("/")[0] || null;
-    return fileId ? `https://drive.google.com/uc?export=download&id=${fileId}` : null;
-  };
-
-  const handleDownload = (url) => {
-    const downloadUrl = getDownloadLink(url);
-    if (downloadUrl) {
+  const handleDownload = async (url, fileName) => {
+    if (url) {
       const link = document.createElement("a");
-      link.href = downloadUrl;
+      link.href = url;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
     } else {
-      alert("Không tìm thấy fileId!");
+      alert("Không tìm thấy file!");
+      return;
+    }
+
+    try {
+      await confirmDownload({ fileId: id, fileName });
+      await fetchData(); // Chờ cập nhật dữ liệu xong rồi mới cập nhật UI
+    } catch (error) {
+      console.log(error);
     }
   };
 
   return (
     <div className="downloadstl-container">
-      <h3>📥 Các file đã tải xuống:</h3>
+      <h3>📥 Các file cần tải xuống:</h3>
       {downloadedFiles.length === 0 ? (
         <p>Chưa có file nào.</p>
       ) : (
         <ul>
-          {downloadedFiles.map((file, index) => (
-            <li key={index}>
-              <span>{file.fileName}</span>
-              <button onClick={() => handleDownload(file.fileContent)}>
-                📥 Tải xuống
-              </button>
-            </li>
-          ))}
+          {downloadedFiles.map((file, index) =>
+            file.fileContent ? (
+              <li key={index}>
+                <span>{file.fileName}</span>
+                <button onClick={() => handleDownload(file.fileContent, file.fileName)}>
+                  📥 Tải xuống
+                </button>
+              </li>
+            ) : null
+          )}
         </ul>
       )}
     </div>

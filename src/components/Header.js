@@ -131,6 +131,9 @@ const Header = () => {
                             <Link to="/manager/upload-gcode" className="nav-link">
                               <FaUpload /> Upload Gcode
                             </Link>
+                            <Link to="/manager/controll" className="nav-link">
+                              <FaBoxOpen /> Điều khiển máy in
+                            </Link>
                           </li>
                         )}
                        
