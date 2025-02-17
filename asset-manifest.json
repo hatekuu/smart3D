@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/smart3D/static/css/main.f6cb4c3d.css",
-    "main.js": "/smart3D/static/js/main.4655d63d.js",
+    "main.js": "/smart3D/static/js/main.d59e03dd.js",
     "index.html": "/smart3D/index.html",
     "main.f6cb4c3d.css.map": "/smart3D/static/css/main.f6cb4c3d.css.map",
-    "main.4655d63d.js.map": "/smart3D/static/js/main.4655d63d.js.map"
+    "main.d59e03dd.js.map": "/smart3D/static/js/main.d59e03dd.js.map"
   },
   "entrypoints": [
     "static/css/main.f6cb4c3d.css",
-    "static/js/main.4655d63d.js"
+    "static/js/main.d59e03dd.js"
   ]
 }
