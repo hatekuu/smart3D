@@ -90,4 +90,13 @@ export const getFilePrint = async (query)=>{
     throw new Error(error.response?.data?.message || 'Failed to query');
   }
 }
-export default { uploadFile ,getPrinter,confirmOrder,processGcodePricing,uploadStl  ,downloadStl,confirmDownload,updateStatus};
+export const sendCommand = async (query)=>{
+  console.log(query)
+  try {
+    const response= await axiosInstance.post('/3dprint/sendCommand',query)
+    return response.data
+  } catch (error) {
+    throw new Error(error.response?.data?.message || 'Failed to query');
+  }
+}
+export default { uploadFile ,getPrinter,confirmOrder,processGcodePricing,uploadStl  ,downloadStl,confirmDownload,updateStatus,sendCommand};

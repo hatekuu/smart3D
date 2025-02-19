@@ -1,0 +1,182 @@
+.printControll-container {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    background-color: #f8f9fa;
+  }
+  
+  .selected-control-printer {
+    display: flex;
+    justify-content: space-between;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+  }
+  
+  .selected-control-printer h3 {
+    font-size: 24px;
+    margin-bottom: 15px;
+    color: #333;
+  }
+  
+  .selected-control-printer button {
+    padding: 10px;
+    margin: 10px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .selected-control-printer button:hover {
+    background-color: #45a049;
+  }
+  
+  .printer-control-info {
+    text-align: left;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  }
+  
+  .printer-control-info p {
+    margin: 8px 0;
+    font-size: 16px;
+    color: #555;
+  }
+  
+  .printer-control-info label {
+    font-size: 16px;
+    font-weight: bold;
+    margin-right: 10px;
+  }
+  
+  .printer-control-info input {
+    padding: 5px;
+    font-size: 16px;
+    width: 80px;
+  }
+  
+  .control-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+  }
+  
+  .control-buttons-row {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
+  
+  .control-buttons button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .control-buttons button:hover {
+    background-color: #0056b3;
+  }
+  
+  .printer-button {
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .printer-button:hover {
+    background-color: #218838;
+  }
+  
+  .buttons-container {
+    position: relative;
+    width: 200px;
+    height: 200px;
+  }
+  
+  .buttons-container .control-buttons-row {
+    position: absolute;
+  }
+  
+  .row-1 {
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  
+  .row-2 {
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+  }
+  
+  .row-3 {
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  
+  .row-4 {
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+  }
+  
+  .printer-button {
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .printer-button:hover {
+    background-color: #218838;
+  }
+  
+  
+  .file-list {
+    margin-top: 20px;
+  }
+  
+  .file-list h3 {
+    margin-bottom: 10px;
+  }
+  
+  .file-list ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .file-list li {
+    margin-bottom: 8px;
+  }
+  
+  .printer-graph-container {
+    width: 800px;
+    height: 500px;
+    position:relative;
+    
+  }
+  
+  @media (max-width: 768px) {
+    .selected-control-printer {
+      flex-direction: column;
+    }
+  }
+  

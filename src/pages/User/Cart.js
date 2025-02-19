@@ -108,7 +108,7 @@ const Cart = () => {
     }
     const checkoutData = {
       userId: user.userId,
-      cart,
+      totalPrice:total,
       address: selectedAddress,
       ...(discountApplied && { discount: selectedDiscount }),
     };
