@@ -8,7 +8,7 @@ const DownloadSTL = () => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [downloadedFiles]);
 
   const fetchData = async () => {
     try {
@@ -40,7 +40,7 @@ const DownloadSTL = () => {
 
     try {
       await confirmDownload({ fileId: id, fileName });
-      await fetchData(); // Chờ cập nhật dữ liệu xong rồi mới cập nhật UI
+      setDownloadedFiles(downloadedFiles.filter(file => file.fileName !== fileName));
     } catch (error) {
       console.log(error);
     }
