@@ -149,7 +149,8 @@ const Bills = () => {
                   <p><strong>Ngày đặt:</strong> {new Date(order.createdAt).toLocaleString()}</p>
                   <p><strong>Tổng tiền</strong> {order.totalPrice}</p>
                   {order.discount && <p><strong>Mã giảm giá:</strong> {order.discount}</p>}
-          
+                  {order.ordertype && <p><strong>Loại đơn:</strong> {order.ordertype}</p>}
+                  {order.paymentMethod && <p><strong>Phương thức thanh toán:</strong> {order.paymentMethod}</p>}
                   {order.products && <p><strong>Sản phẩm:</strong> {order.products.map((p) => p.name).join(", ")}</p>}
                   <div className="bills-btn-group">
                     {order.status === "pending" && (
