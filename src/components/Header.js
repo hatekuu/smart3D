@@ -177,7 +177,9 @@ const Header = () => {
                                     <Link to="/manager/bills" className="dropdown-link" onClick={handleMenuItemClick}>
                                     <FaClipboardList /> Đơn hàng
                                   </Link>
-                                  
+                                  <Link to="/manager/profit" className="dropdown-link" onClick={handleMenuItemClick}>
+                                    <FaClipboardList /> Doanh thu
+                                  </Link>
                                   </>
                                 
                                 )}

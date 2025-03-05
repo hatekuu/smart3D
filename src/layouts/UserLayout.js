@@ -20,6 +20,7 @@ const UserLayout = () => {
   }, []);
 
   return (
+    <>
     <div className="layout-container"> {/* Đóng gói tất cả trong layout-container */}
       <Header />
       <div className="contentUser"> {/* Thêm lớp content để chứa nội dung */}
@@ -35,6 +36,7 @@ const UserLayout = () => {
       </div>
       <Footer />
     </div>
+    </>
   );
 };
 

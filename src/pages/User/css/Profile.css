@@ -7,7 +7,7 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
   
-  h2, h3 {
+  .profile-container h2, h3 {
     color: #333;
   }
   
@@ -72,7 +72,7 @@
     margin-top: 10px;
   }
   
-  button {
+  .profile-container button {
     padding: 8px 12px;
     border: none;
     border-radius: 5px;
@@ -81,7 +81,7 @@
     transition: 0.3s;
   }
   
-  button:hover {
+  .profile-container button:hover {
     opacity: 0.8;
   }
   

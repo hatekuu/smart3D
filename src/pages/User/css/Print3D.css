@@ -7,7 +7,6 @@
     background-color: #f8f9fa; /* Màu nền nhẹ nhàng */
 
   }
-  
   .selected-printer {
     background: white;
     padding: 20px;
@@ -46,3 +45,51 @@
   .controll {
     padding-top: 20px;
   }
+  .filter-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 1000px;
+    margin: 20px auto;
+  }
+  
+  /* Style cho các select dropdown */
+  .filter-container select {
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background: #fff;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    width: 180px;
+  }
+  
+  .filter-container select:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  }
+  
+  /* Style cho nút lọc */
+  .filter-container button {
+    padding: 10px 15px;
+    font-size: 14px;
+    border: none;
+    border-radius: 5px;
+    background: #007bff;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .filter-container button:hover {
+    background: #0056b3;
+  }
+  

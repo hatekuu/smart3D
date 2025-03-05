@@ -4,13 +4,10 @@
   max-width: 1300px;
   margin: 20px auto;
   font-family: Arial, sans-serif;
+
   
 }
-body, html {
-  height: 50%;
-  margin: 0;
-  width: 99.872%;
-}
+
 
 .product-list-container h1 {
   text-align: center;

@@ -1,30 +1,39 @@
 import React, { useEffect, useState } from 'react';
-import { getCart, updateCart, removeFromCart, checkout, applyDiscount, getDiscount } from '../../api/product';
+import { getCart, updateCart, removeFromCart, checkout, getDiscount,applyDiscount } from '../../api/product';
+import {payment,transactionStatus} from '../../api/payment'
+import { useLocation } from 'react-router-dom';
 import {getUserProfile} from '../../api/auth'
 import './css/Cart.css'; // Import file CSS
 
 const Cart = () => {
   const [cart, setCart] = useState([]); // Khởi tạo cart với mảng rỗng
+  const [addresses, setAddress] = useState([]);
   const [discounts, setDiscounts] = useState([]); // Lưu trữ các discount codes
   const [selectedDiscount, setSelectedDiscount] = useState(null); // Discount code được chọn
-  const [discountApplied, setDiscountApplied] = useState(false); // Kiểm tra xem giảm giá đã được áp dụng chưa
-  const [addresses, setAddress] = useState([]);
+  const [discountApplied, setDiscountApplied] = useState(false); // 
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [total,setTotal]=useState(0)
+  const [paymentMethod,setPaymentMethod]=useState(null)
   const user = JSON.parse(localStorage.getItem('userData')) || {};
-
+  const location = useLocation();
   useEffect(() => {
-    const fetchData = async () => {
+   
+  
+    fetchData();
+    CheckPaymentStatus();
+  }, []); // Không cần phụ thuộc vào `total`, chỉ chạy một lần khi component mount.
+   const fetchData = async () => {
       try {
         const data = await getCart(user.userId);
         const discountData = await getDiscount();
         const profile= await getUserProfile()
         
-        console.log(profile.address)
+   
         if (profile.address) setAddress(profile.address);
         if (!data.message) {
           setCart(data);
           // Tính tổng tiền ngay sau khi nhận dữ liệu giỏ hàng
+          console.log(data)
           const newTotal = data.reduce((sum, product) => sum + product.price * product.quantity, 0);
           setTotal(newTotal);
         }
@@ -36,71 +45,85 @@ const Cart = () => {
         console.log(error.error);
       }
     };
-  
-    fetchData();
-  }, []); // Không cần phụ thuộc vào `total`, chỉ chạy một lần khi component mount.
-  
-
+const CheckPaymentStatus=async()=>{
+    
+  const params = new URLSearchParams(location.search);
+  const requestId = params.get('requestId');
+  if (requestId) {
+    try {
+      const response = await transactionStatus({ orderId: requestId,userId:user.userId });
+      if (response.resultCode === 0) {
+        alert("Thanh toán thành công!");
+        window.location.href = "/smart3D/products";
+      } else {
+        alert("Thanh toán thất bại!");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+}
   // Hàm để xử lý khi muốn xóa một sản phẩm khỏi giỏ hàng
   const handleRemove = async (productId) => {
+
     try {
       await removeFromCart({ userId: user.userId, productId });
       const updatedCart = cart.filter(item => item._id !== productId);
       setCart(updatedCart);
-      
       // Cập nhật total sau khi xóa sản phẩm
-      const newTotal = updatedCart.reduce((sum, product) => sum + product.price * product.quantity, 0);
-      setTotal(newTotal);
+      const newcart=cart.filter(item => item._id !== productId)
+      setTotal(newcart.reduce((sum=0, product) => sum + product.price * product.quantity, 0));
+    
     } catch (error) {
       console.log(error.error);
     }
   };
-  
-
   // Hàm để xử lý khi muốn cập nhật quantity của sản phẩm
   const handleUpdateQuantity = async (productId, quantity) => {
+   
     try {
       if (quantity === 0) {
         // Nếu số lượng về 0, gọi API xóa trực tiếp
         await removeFromCart({ userId: user.userId, productId });
-        setCart(cart.filter(item => item._id !== productId));
+         const newcart=cart.filter(item => item._id !== productId)
+         setCart(newcart);
+         setTotal(newcart.reduce((sum=0, product) => sum + product.price * product.quantity, 0));
       } else {
         await updateCart({ userId: user.userId, productId, quantity });
-  
         setCart(cart.map((item) => 
           item._id === productId ? { ...item, quantity } : item
         ));
+        const newcart=cart.map((item) => 
+          item._id === productId ? { ...item, quantity } : item
+        )
+        setCart(newcart);
+           setTotal(newcart.reduce((sum=0, product) => sum + product.price * product.quantity, 0));
       }
-      
-      // Tính lại total sau mỗi thay đổi
-      setTotal(cart.reduce((sum, item) => sum + item.price * item.quantity, 0));
-  
+
+
     } catch (error) {
       console.log(error.error);
     }
   };
-  
-  // Hàm áp dụng discount
-  const handleApplyDiscount = async () => {
-    if (selectedDiscount) {
-      try {
-        const result = await applyDiscount({ discountCode: selectedDiscount, userId: user.userId });
-  
-        if (result.length > 0 && result[0].totalAmountWithDiscount !== undefined) {
-          setTotal(result[0].totalAmountWithDiscount);
-          setDiscountApplied(true);
-        } else {
-          alert("Invalid discount code or error applying discount.");
+    // Hàm áp dụng discount
+    const handleApplyDiscount = async () => {
+      if (selectedDiscount) {
+        try {
+          const result = await applyDiscount({ discountCode: selectedDiscount, userId: user.userId });
+    
+          if (result.length > 0 && result[0].totalAmountWithDiscount !== undefined) {
+            setTotal(result[0].totalAmountWithDiscount);
+            setDiscountApplied(true);
+          } else {
+            alert("Invalid discount code or error applying discount.");
+          }
+        } catch (error) {
+          console.log("Error applying discount:", error);
         }
-      } catch (error) {
-        console.log("Error applying discount:", error);
+      } else {
+        alert("Please select a discount code.");
       }
-    } else {
-      alert("Please select a discount code.");
-    }
-  };
-  
-
+    };
   const handleCheckout = async () => {
     if (!selectedAddress) {
       alert("Please select a shipping address before checkout.");
@@ -110,11 +133,23 @@ const Cart = () => {
       userId: user.userId,
       totalPrice:total,
       address: selectedAddress,
-      ...(discountApplied && { discount: selectedDiscount }),
+      paymentMethod: paymentMethod,
     };
     try {
-      await checkout(checkoutData);
-      window.location.href='/smart3D/products'
+      if (paymentMethod === "Cash") {
+     
+        await checkout(checkoutData);
+        window.location.href = "/smart3D/products";
+      } else if (paymentMethod === "Momo") {
+        const response = await payment({amount:total/1000});
+        await checkout(checkoutData);
+        console.log(response)
+        if (response && response.payUrl) {
+          window.location.href = response.payUrl; // Chuyển hướng đến trang thanh toán Momo
+        } else {
+          alert("Lỗi khi tạo đơn thanh toán Momo!");
+        }
+      }
     } catch (error) {
      console.log(error) 
     }
@@ -160,21 +195,19 @@ const Cart = () => {
               ))}
             </tbody>
           </table>
-
-          {/* Hiển thị danh sách mã giảm giá */}
-          <div className="discount-container">
+ {/* Hiển thị danh sách mã giảm giá */}
+ <div className="discount-container">
        
-            <select onChange={(e) => setSelectedDiscount(e.target.value)} value={selectedDiscount}>
-              <option value="">Chọn mã giảm giá</option>
-              {discounts.map((discount) => (
-                <option key={discount._id} value={discount.code}>
-                  {discount.code} - {discount.discountPercentage}% off
-                </option>
-              ))}
-            </select>
-            <button onClick={handleApplyDiscount}>Áp dụng mã giảm giá</button>
-          </div>
-               {/* Hiển thị địa chỉ */}
+       <select onChange={(e) => setSelectedDiscount(e.target.value)} value={selectedDiscount}>
+         <option value="">Chọn mã giảm giá</option>
+         {discounts.map((discount) => (
+           <option key={discount._id} value={discount.code}>
+             {discount.code} - {discount.discountPercentage}% off
+           </option>
+         ))}
+       </select>
+       <button onClick={handleApplyDiscount}>Áp dụng mã giảm giá</button>
+     </div>
           <div className="discount-container">
             <h3>Địa Chỉ</h3>
             <select onChange={(e) => setSelectedAddress(e.target.value)} value={selectedAddress}>
@@ -193,6 +226,12 @@ const Cart = () => {
           </div>
 
           {/* Nút Checkout */}
+          <select name="Filament" value={paymentMethod} onChange={(e)=>setPaymentMethod(e.target.value)}>
+          <option value="">Chọn phương thức thanh toán</option>
+          <option value="Momo">Momo</option>
+          <option value="Cash">Thanh toán tiền mặt</option>
+       
+        </select>
           <button onClick={handleCheckout} className="checkout-btn">Đặt hàng</button>
         </div>
       )}

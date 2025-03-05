@@ -22,7 +22,14 @@ export const getPrinter = async ()=>{
     throw new Error(error.response?.data?.message || 'Failed to get printer');
   }
 }
-
+export const filterPrint = async (query) => {
+  try {
+    const response = await axiosInstance.post('/3dprint/filterPrint',query);
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.message || 'Failed to get print');
+  }
+};
 export const uploadStl  = async (formData) => {
   try {
    
@@ -99,4 +106,4 @@ export const sendCommand = async (query)=>{
     throw new Error(error.response?.data?.message || 'Failed to query');
   }
 }
-export default { uploadFile ,getPrinter,confirmOrder,processGcodePricing,uploadStl  ,downloadStl,confirmDownload,updateStatus,sendCommand};
+export default {filterPrint,uploadFile ,getPrinter,confirmOrder,processGcodePricing,uploadStl  ,downloadStl,confirmDownload,updateStatus,sendCommand};

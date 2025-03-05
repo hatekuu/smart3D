@@ -101,7 +101,22 @@ const deleteProduct = async (productId) => {
         throw new Error(error.response?.data?.message || 'Failed to delete product');
     }
 }
-
+const getPrinter = async () => {
+    try {
+        const response = await axiosInstance.post('/manager/getPrinter');
+        return response.data;
+    } catch (error) {
+        throw new Error(error.response?.data?.message || 'Failed to update printer');
+    }
+}
+const getProfit= async (time) => {
+    try {
+        const response = await axiosInstance.post('/manager/orders/profit', time);
+        return response.data;
+    } catch (error) {
+        throw new Error(error.response?.data?.message || 'Failed to fetch profit');
+    }
+}
 export  { getAllUsers, getOrders, updateOrderStatus, getRevenueReport, getTopSellingProducts, getPromotionEffectiveness, 
     updateProduct, addProduct,deleteProduct,
-    addPrinter,updatePrinter,deletePrinter};
+    addPrinter,updatePrinter,deletePrinter,getPrinter,getProfit};

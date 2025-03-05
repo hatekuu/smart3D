@@ -111,31 +111,6 @@
   .buttons-container .control-buttons-row {
     position: absolute;
   }
-  
-  .row-1 {
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-  }
-  
-  .row-2 {
-    top: 50%;
-    left: 0;
-    transform: translateY(-50%);
-  }
-  
-  .row-3 {
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-  }
-  
-  .row-4 {
-    top: 50%;
-    right: 0;
-    transform: translateY(-50%);
-  }
-  
   .printer-button {
     padding: 10px 20px;
     background-color: #28a745;

@@ -5,9 +5,9 @@ footer {
     text-align: center;
     padding: 20px 0;
     position: relative;
-    width: 101.6% ; /* Chiều ngang bằng với màn hình trừ đi padding */
+
     bottom: 0;
-    left: -25px; /* Đảm bảo footer bắt đầu từ cạnh trái màn hình với khoảng cách */
+  
     border-top: 2px solid #ced4da; /* Thêm viền trên */
    
   }
