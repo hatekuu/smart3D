@@ -27,7 +27,7 @@ const Profit = () => {
             const { data, totalPages } = await getProfit({ startDate, endDate, category, page, limit });
             setTotalPages(totalPages);
             setProfitData(data);
-  
+            console.log(data,totalPages);
             console.log({ startDate, endDate, category, page, limit });
         } catch (error) {
             alert(error.message);
@@ -50,8 +50,10 @@ const Profit = () => {
                               setPage(1);}
                 }>
                     <option value="">Tất cả danh mục</option>
-                    <option value="Máy in 3D">Máy in 3D</option>
-                    <option value="Phụ kiện">Phụ kiện</option>
+                    <option value="FDM 3D Printer">Máy in 3D FDM</option>
+                    <option value="Resin 3D Printer">Máy in 3D Resin</option>
+                    <option value="3D Printing Filament">Nhựa in</option>
+                    <option value="3D Printer Accessories">Phụ kiện</option>
                 </select>
 
                 {/* Chọn số lượng trên trang */}
