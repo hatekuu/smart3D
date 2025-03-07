@@ -60,6 +60,7 @@ const ManagerOrders = () => {
             <th>Phương thức thanh toán</th>
             <th>danh sách sản phẩm</th>
             <th>Ngày đặt</th>
+            <th>Dịa chỉ</th>
             <th>Trạng thái</th>
             <th>Hành động</th>
           </tr>
@@ -82,7 +83,9 @@ const ManagerOrders = () => {
                  
                 </td>
                 <td>{new Date(order.createdAt).toLocaleString()}</td>
+                <td>{order.address.address}-{order.address.phone}-{order.address.note}</td>
                 <td className={`status ${order.status}`}>{statusText[order.status]}</td>
+            
                 <td>
                   {order.status === "pending" && (
                     <>

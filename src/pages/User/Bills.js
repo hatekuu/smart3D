@@ -117,10 +117,10 @@ const CheckPaymentStatus=async()=>{
   
     try {
       if(paymentMethod==="Momo"){
-      
+        await confirmOrder(confirmData);
         const response = await payment({ amount: Math.round(totalPrice * 1000), orderType: "3dPrint" });
 
-        await confirmOrder(confirmData);
+       
         if(response && response.payUrl){
           window.location.href = response.payUrl;}
           else{
