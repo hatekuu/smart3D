@@ -81,6 +81,7 @@ const PrintList = ({ printers, setPrinterId, getFile }) => {
       await addPrinter(printerData);
       alert('Thêm máy in thành công!');
       resetForm();
+      window.location.reload()
     } catch (error) {
       setErrorMessage(error.message || 'Có lỗi xảy ra khi thêm máy in.');
       setTimeout(() => setErrorMessage(''), 3000);
@@ -99,6 +100,7 @@ const PrintList = ({ printers, setPrinterId, getFile }) => {
       alert('Cập nhật máy in thành công!');
       resetForm();
       setEditingPrinterId(null);
+      window.location.reload()
     } catch (error) {
       setErrorMessage(error.message || 'Có lỗi xảy ra khi cập nhật máy in.');
       setTimeout(() => setErrorMessage(''), 3000);
@@ -113,6 +115,7 @@ const PrintList = ({ printers, setPrinterId, getFile }) => {
       try {
         await deletePrinter(printerId);
         alert('Xóa máy in thành công!');
+        window.location.reload()
       } catch (error) {
         setErrorMessage(error.message || 'Có lỗi xảy ra khi xóa máy in.');
         setTimeout(() => setErrorMessage(''), 3000);
