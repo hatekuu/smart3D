@@ -38,6 +38,7 @@ const PrintList = ({ printers, setPrinterId, getFile }) => {
   const validateForm = () => {
     if (!printerData.Name || !printerData.Type || !printerData.Filament) {
       setErrorMessage('Tên máy in, Loại và Filament là bắt buộc!');
+      setTimeout(() => setErrorMessage(''), 3000);
       return false;
     }
     return true;
@@ -82,6 +83,7 @@ const PrintList = ({ printers, setPrinterId, getFile }) => {
       resetForm();
     } catch (error) {
       setErrorMessage(error.message || 'Có lỗi xảy ra khi thêm máy in.');
+      setTimeout(() => setErrorMessage(''), 3000);
     } finally {
       setIsLoading(false);
     }
@@ -99,6 +101,7 @@ const PrintList = ({ printers, setPrinterId, getFile }) => {
       setEditingPrinterId(null);
     } catch (error) {
       setErrorMessage(error.message || 'Có lỗi xảy ra khi cập nhật máy in.');
+      setTimeout(() => setErrorMessage(''), 3000);
     } finally {
       setIsLoading(false);
     }
@@ -112,6 +115,7 @@ const PrintList = ({ printers, setPrinterId, getFile }) => {
         alert('Xóa máy in thành công!');
       } catch (error) {
         setErrorMessage(error.message || 'Có lỗi xảy ra khi xóa máy in.');
+        setTimeout(() => setErrorMessage(''), 3000);
       }
     }
   };
@@ -121,7 +125,7 @@ const PrintList = ({ printers, setPrinterId, getFile }) => {
       <h2>Quản lý máy in</h2>
 
       {/* Show error message if any */}
-      {errorMessage && <div className="error-message">{errorMessage}</div>}
+      {errorMessage && <div className="notification">{errorMessage}</div>}
 
       {/* Printer Form Component */}
       {(editingPrinterId || isAddNew) && (

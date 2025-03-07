@@ -141,6 +141,7 @@ const PrintControll = () => {
 
             <div className="printer-details">
               <p><strong>Tên:</strong> {selectedPrinter?.Printer.Name}</p>
+              <p><strong>Id:</strong> {selectedPrinter?._id}</p>
               <p><strong>Khổ in:</strong> {selectedPrinter?.Printer.Size}</p>
               <p><strong>Vật liệu:</strong> {selectedPrinter?.Printer.Filament}</p>
               <p><strong>Màu:</strong> {selectedPrinter?.Printer.Color}</p>
@@ -190,14 +191,14 @@ const PrintControll = () => {
               <button className="button" onClick={() => UpdateStatus(printerId, "writing")}>Bắt đầu lưu file</button>
             </div>
 
-            <div className="move-controls">
+            {/* <div className="move-controls">
               <button className="move-button" onClick={() => handleMove("X", 10)}>+X</button>
               <button className="move-button" onClick={() => handleMove("X", -10)}>-X</button>
               <button className="move-button" onClick={() => handleMove("Y", 10)}>+Y</button>
               <button className="move-button" onClick={() => handleMove("Y", -10)}>-Y</button>
               <button className="move-button" onClick={() => handleMove("Z", 10)}>+Z</button>
               <button className="move-button" onClick={() => handleMove("Z", -10)}>-Z</button>
-            </div>
+            </div> */}
             <div>
         </div>
             {tempHistory && (
