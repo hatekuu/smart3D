@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import { getUserOrders, cancelOrder, confirmReceived } from "../../api/product";
 import { processGcodePricing, confirmOrder } from "../../api/3dprint";
 import { FaTrash, FaCheckCircle, FaCheck } from "react-icons/fa";
+import { getUserProfile } from "../../api/auth";
+import { useLocation } from 'react-router-dom';
+import { payment,transactionStatus } from "../../api/payment";
 import "./css/Bills.css"; // Import file CSS
 
 const Bills = () => {
@@ -9,19 +12,44 @@ const Bills = () => {
   const [bills, setBills] = useState([]);
   const [loading, setLoading] = useState(false);
   const [pricingResult, setPricingResult] = useState(null); // Lưu kết quả tính giá
-
+  const [addresses, setAddress] = useState([]);
+    const [selectedAddress, setSelectedAddress] = useState(null);
+     const [paymentMethod,setPaymentMethod]=useState(null)
+       const location = useLocation();
   useEffect(() => {
     fetchOrders();
     FetchProcessGcodePricing();
+    CheckPaymentStatus();
   }, []);
-
+const CheckPaymentStatus=async()=>{
+    
+  const params = new URLSearchParams(location.search);
+  const requestId = params.get('requestId');
+  if (requestId) {
+    try {
+      const response = await transactionStatus({ orderId: requestId,userId:user.userId , orderType:"3dPrint"});
+      if (response.resultCode === 0) {
+        alert("Thanh toán thành công!");
+        window.location.href = "/smart3D/products";
+      } else {
+        alert("Thanh toán thất bại!");
+        window.location.href = "/smart3D/products";
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+}
   const fetchOrders = async () => {
     try {
+  const profile= await getUserProfile()
+ 
+  if (profile.address) setAddress(profile.address);
       const data = await getUserOrders(user.userId);
       if(data.length > 0) {
         setBills(data);
       }
-      console.log(data);
+
     } catch (error) {
       console.log("Lỗi khi lấy đơn hàng:", error);
     }
@@ -56,10 +84,10 @@ const Bills = () => {
     setLoading(true);
     try {
       const response = await processGcodePricing({ userId: user.userId });
-      console.log("giá", response);
+
       if (response.pricing) {
-        setPricingResult(response.pricing); // Lưu kết quả
-        console.log("Kết quả tính giá:", response.pricing);
+        setPricingResult(response.pricing[0]); // Lưu kết quả
+
       }
     } catch (error) {
       console.log("Lỗi khi tính giá G-code:", error);
@@ -68,27 +96,61 @@ const Bills = () => {
   };
 
   // Function xác nhận đơn hàng sau khi có giá
-  const handleConfirmOrder = async (fileId, fileName, price, printId, gcodeId) => {
+  const handleConfirmOrder = async (fileId, fileName, totalPrice, printId) => {
+    setLoading(true);
+    if (!selectedAddress&&!paymentMethod){alert("Chưa nhập địa chỉ hoặc hình thức thanh toán")}
+
+    const confirmData={
+      address:selectedAddress,
+      fileId,
+      printId, // Giả lập printId
+      userId: user.userId,
+      confirm: true,
+      totalPrice,
+      fileName,
+      paymentMethod
+    }
+  
+    try {
+      if(paymentMethod==="Momo"){
+      
+        const response = await payment({ amount: Math.round(totalPrice * 1000), orderType: "3dPrint" });
+
+        await confirmOrder(confirmData);
+        if(response && response.payUrl){
+          window.location.href = response.payUrl;}
+          else{
+            alert("Lỗi khi tạo đơn thanh toán Momo!");
+            window.location.reload(); 
+          }
+      }else if(paymentMethod==="Cash"){
+        await confirmOrder(confirmData);
+        alert("Đơn hàng đã được xác nhận!");
+        window.location.reload(); 
+      }
+    } catch (error) {
+      console.log("Lỗi khi xác nhận đơn:", error);
+    }
+    setLoading(false);
+  };
+  const handleCancel = async (fileId, fileName, totalPrice, printId) => {
     setLoading(true);
 
     try {
       await confirmOrder({
-   
-        gcodeId,
         fileId,
         printId, // Giả lập printId
         userId: user.userId,
-        confirm: true,
-        totalPrice: price,
+        confirm: false,
+        totalPrice,
         fileName,
       });
-      alert("Đơn hàng đã được xác nhận!");
+      alert("Đơn hàng đã hủy!");
       window.location.reload(); 
     } catch (error) {
-      console.log("Lỗi khi xác nhận đơn hàng:", error);
+      console.log("Lỗi khi xác hủy:", error);
     }
     setLoading(false);
-    console.log(fileId, fileName, price);
   };
 
   const getStatusText = (status) => {
@@ -118,22 +180,40 @@ const Bills = () => {
           {/* 🔹 Hiển thị kết quả tính giá */}
           {pricingResult && (
             <div className="pricing-result">
-              <h3>💰 Các file gcode hiện có</h3>
+              <h3>💰Tính tiền file in 3D</h3>
               <ul>
-                {pricingResult.map((item) => (
-                  item.status === "waiting-confirm" && (
-                    <li key={item.fileName}>
-                      {item.fileName} - <strong>{item.price.toLocaleString("vi-VN")} VND</strong>
+
+                   <strong>Tổng giá tiền:{pricingResult.totalPrice.toLocaleString("vi-VN")} VND.</strong>
+                   <strong> Số file cần in:{pricingResult.fileName.length} </strong>
+                      <select onChange={(e) => setSelectedAddress(e.target.value)} value={selectedAddress}>
+                    <option value="">Chọn địa chỉ</option>
+                    {addresses.map((address, index) => (
+                      <option key={index} value={index}>
+                        {address.address} - {address.phone} - {address.note}
+                      </option>
+                    ))}
+          </select>
+          <select name="Filament" value={paymentMethod} onChange={(e)=>setPaymentMethod(e.target.value)}>
+                    <option value="">Chọn phương thức thanh toán</option>
+                    <option value="Momo">Momo</option>
+                    <option value="Cash">Thanh toán tiền mặt</option>
+                    </select>
                       <button
                         className="bills-btn confirm"
-                        onClick={() => handleConfirmOrder(item.fileId, item.fileName, item.price, item.printId, item.gcodeId)}
+                        onClick={() => handleConfirmOrder(pricingResult._id.fileId, pricingResult.fileName, pricingResult.totalPrice, pricingResult._id.printId, )}
                         disabled={loading}
                       >
                         <FaCheck className="bill-icon" /> Xác nhận đơn
                       </button>
-                    </li>
-                  )
-                ))}
+                      <button
+                        className="bills-btn cancel"
+                        onClick={() => handleCancel(pricingResult._id.fileId, pricingResult.fileName, pricingResult.totalPrice, pricingResult._id.printId)}
+                        disabled={loading}
+                      >
+                        <FaCheck className="bill-icon" /> Hủy đơn
+                      </button>
+                   
+                
               </ul>
             </div>
           )}

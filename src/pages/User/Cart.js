@@ -17,8 +17,6 @@ const Cart = () => {
   const user = JSON.parse(localStorage.getItem('userData')) || {};
   const location = useLocation();
   useEffect(() => {
-   
-  
     fetchData();
     CheckPaymentStatus();
   }, []); // Không cần phụ thuộc vào `total`, chỉ chạy một lần khi component mount.
@@ -51,7 +49,7 @@ const CheckPaymentStatus=async()=>{
   const requestId = params.get('requestId');
   if (requestId) {
     try {
-      const response = await transactionStatus({ orderId: requestId,userId:user.userId });
+      const response = await transactionStatus({ orderId: requestId,userId:user.userId , orderType:"products"});
       if (response.resultCode === 0) {
         alert("Thanh toán thành công!");
         window.location.href = "/smart3D/products";
@@ -141,7 +139,7 @@ const CheckPaymentStatus=async()=>{
         await checkout(checkoutData);
         window.location.href = "/smart3D/products";
       } else if (paymentMethod === "Momo") {
-        const response = await payment({amount:total/1000});
+        const response = await payment({amount:total/1000,orderType:"products"});
         await checkout(checkoutData);
         console.log(response)
         if (response && response.payUrl) {

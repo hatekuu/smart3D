@@ -87,7 +87,13 @@
     background-color: #28a745;
     color: white;
   }
-  
+  .cancel {
+    background-color: red;
+    color: white;
+  }
+  .cancel:hover {
+    background-color: #218838;
+  }
   .confirm:hover {
     background-color: #218838;
   }

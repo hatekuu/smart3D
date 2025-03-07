@@ -23,20 +23,22 @@ const UploadGcode = () => {
   };
 
   const chunkFile = (fileContent) => {
-    const chunkSize = 1*1024 * 1024; // 1mb
+    const chunkSize = 1 * 1024 * 1024; // 1mb
     let chunks = [];
     let currentPosition = 0;
     let chunkIndex = 1;
-
+  
     while (currentPosition < fileContent.length) {
       let chunk = fileContent.slice(currentPosition, currentPosition + chunkSize);
-      chunks.push({ chunk, chunkIndex });
+      let isLast = currentPosition + chunkSize >= fileContent.length; // Kiểm tra nếu chunk này là cuối cùng
+      chunks.push({ chunk, chunkIndex, isLast });
       currentPosition += chunkSize;
       chunkIndex++;
     }
-
+  
     return chunks;
   };
+  
 
   const handleUpload = async () => {
     if (!fileContent) {
@@ -47,8 +49,8 @@ const UploadGcode = () => {
     const fileChunks = chunkFile(fileContent);
 
     try {
-      for (const { chunk, chunkIndex } of fileChunks) {
-        await uploadFile(fileName, chunk, process);
+      for (const { chunk, chunkIndex,isLast } of fileChunks) {
+        await uploadFile(fileName, chunk, process,isLast);
         console.log(`Đã gửi phần ${chunkIndex}`);
       }
 
