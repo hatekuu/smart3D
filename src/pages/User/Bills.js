@@ -45,6 +45,10 @@ const CheckPaymentStatus=async()=>{
   const profile= await getUserProfile()
  
   if (profile.address) setAddress(profile.address);
+  if(profile.address.length==0) {
+    alert("Vui lòng cập nhật thông tin địa chỉ mua hàng")
+    window.location.href = "/smart3D/products/profile";
+  }
       const data = await getUserOrders(user.userId);
       if(data.length > 0) {
         setBills(data);

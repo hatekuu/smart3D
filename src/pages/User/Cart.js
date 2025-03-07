@@ -28,10 +28,15 @@ const Cart = () => {
         
    
         if (profile.address) setAddress(profile.address);
+        console.log("địa chỉ:",profile.address)
+        if(profile.address.length==0) {
+          alert("Vui lòng cập nhật thông tin địa chỉ mua hàng")
+          window.location.href = "/smart3D/products/profile";
+        }
         if (!data.message) {
           setCart(data);
           // Tính tổng tiền ngay sau khi nhận dữ liệu giỏ hàng
-          console.log(data)
+     
           const newTotal = data.reduce((sum, product) => sum + product.price * product.quantity, 0);
           setTotal(newTotal);
         }
@@ -141,7 +146,7 @@ const CheckPaymentStatus=async()=>{
       } else if (paymentMethod === "Momo") {
         const response = await payment({amount:total/1000,orderType:"products"});
         await checkout(checkoutData);
-        console.log(response)
+   
         if (response && response.payUrl) {
           window.location.href = response.payUrl; // Chuyển hướng đến trang thanh toán Momo
         } else {
@@ -208,14 +213,15 @@ const CheckPaymentStatus=async()=>{
      </div>
           <div className="discount-container">
             <h3>Địa Chỉ</h3>
-            <select onChange={(e) => setSelectedAddress(e.target.value)} value={selectedAddress}>
-                    <option value="">Chọn địa chỉ</option>
-                    {addresses.map((address, index) => (
-                      <option key={index} value={index}>
-                        {address.address} - {address.phone} - {address.note}
-                      </option>
-                    ))}
-          </select>
+                    <select onChange={(e) => setSelectedAddress(e.target.value)} value={selectedAddress}>
+          <option value="">Chọn địa chỉ</option>
+          {Array.isArray(addresses) && addresses.map((address, index) => (
+            <option key={index} value={index}>
+              {address?.address} - {address?.phone} - {address?.note}
+            </option>
+          ))}
+        </select>
+
 
           </div>
           {/* Hiển thị tổng tiền */}
