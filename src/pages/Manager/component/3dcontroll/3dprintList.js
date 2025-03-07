@@ -114,7 +114,7 @@ const PrintList = ({ printers, setPrinterId, getFile }) => {
     if (window.confirm('Bạn có chắc muốn xóa máy in này?')) {
       try {
         await deletePrinter(printerId);
-        alert('Xóa máy in thành công!');
+        alert('Xóa máy in thành công!!');
         window.location.reload()
       } catch (error) {
         setErrorMessage(error.message || 'Có lỗi xảy ra khi xóa máy in.');
